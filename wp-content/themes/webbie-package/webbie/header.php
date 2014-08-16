@@ -87,15 +87,11 @@ get_template_part( 'template-parts/cake_contact-setup');
 	</a>
 
 	<hgroup class="site_titles">
-		<h1 <?php if ( $NHP_Options->get('logo_image') ) { ?>class="has_logo_icon" <?php } ?>>
-
-
 				<?php // logo image icon
 				if ( $NHP_Options->get('logo_image') ) { ?>
 					<img src="<?php $NHP_Options->show('logo_image'); ?>" alt="<?php echo esc_attr( get_bloginfo( 'description', 'display' ) ); ?>" class="logo_icon" />
 				<?php } ?>
 
-				<?php bloginfo( 'name' ); ?>
 			</a>
 		</h1>
 
