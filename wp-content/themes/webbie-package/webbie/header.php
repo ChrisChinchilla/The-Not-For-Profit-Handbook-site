@@ -86,16 +86,7 @@ get_template_part( 'template-parts/cake_contact-setup');
 		<span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>
 	</a>
 
-	<hgroup class="site_titles">
-				<?php // logo image icon
-				if ( $NHP_Options->get('logo_image') ) { ?>
-					<img src="<?php $NHP_Options->show('logo_image'); ?>" alt="<?php echo esc_attr( get_bloginfo( 'description', 'display' ) ); ?>" class="logo_icon" />
-				<?php } ?>
 
-			</a>
-		</h1>
-
-	</hgroup>
 	<div class="nav_divider logo_divider"><div class="darker"></div><div class="lighter"></div></div>
 
 
