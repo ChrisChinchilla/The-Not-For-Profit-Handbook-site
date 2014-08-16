@@ -38,13 +38,13 @@ global $NHP_Options;
 
 
 	<?php if (  $NHP_Options->get('direct_link_switch') && $NHP_Options->get('direct_link_url') ) { ?>
-	
-	
+
+
 		<a href="<?php $NHP_Options->show('direct_link_url'); ?>" class="action_link purchase_link forest_green" title="<?php esc_attr( $NHP_Options->show('purchase_link_text') ); ?>">
 			<i class="icon-cloud-download"></i>
 			<span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>
 			<span class="link_text"><?php esc_attr( $NHP_Options->show('purchase_link_text') ); ?></span>
-		</a>					
+		</a>
 
 	<?php } else if (  $NHP_Options->get('purchase_page') && !$NHP_Options->get('direct_link_switch') ) { ?>
 
@@ -55,26 +55,30 @@ global $NHP_Options;
 			<span class="link_text"><?php esc_attr( $NHP_Options->show('purchase_link_text') ); ?></span>
 		</a>
 
-	<?php } ?>	
-	
-	
+	<?php } ?>
+
+	<?php if (  $NHP_Options->get('sample_download_link')  && $NHP_Options->get('sample_download_link_text') ) { ?>
+
+		<a href="<?php esc_url( $NHP_Options->show('sample_download_link') );?>" target="_blank" class="action_link read_online_link dull_orange" title="<?php esc_attr( $NHP_Options->show('sample_download_link_text') );?>">
+						<i class="icon-book"></i>
+		<span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>
+			<span class="link_text"><?php esc_attr( $NHP_Options->show('sample_download_link_text') );?></span>
+
+</a>
+	<?php } ?>
+
 	<?php if ( $NHP_Options->get('read_online_page') ) { ?>
 		<?php $read_online_page_permalink = get_permalink( $NHP_Options->get('read_online_page') ); ?>
-		<a href="<?php echo $read_online_page_permalink; ?>" class="action_link read_online_link dull_orange" title="<?php esc_attr( $NHP_Options->show('read_online_link_text') ); ?>">
-			<i class="icon-book"></i>
-			<span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>
+			<br class="clearfloat" />
+	<p class="sample_download ">
+		<a href="<?php echo $read_online_page_permalink; ?>" c title="<?php esc_attr( $NHP_Options->show('read_online_link_text') ); ?>">
+		<i class="icon-download-alt"></i>
 			<span class="link_text"><?php esc_attr( $NHP_Options->show('read_online_link_text') ); ?></span>
 		</a>
-	<?php } ?>	
-	
-	<?php if (  $NHP_Options->get('sample_download_link')  && $NHP_Options->get('sample_download_link_text') ) { ?>
-	<br class="clearfloat" />
-	<p class="sample_download ">
-		<a href="<?php esc_url( $NHP_Options->show('sample_download_link') );?>" title="<?php esc_attr( $NHP_Options->show('sample_download_link_text') );?>">
-			<i class="icon-download-alt"></i>
-			<?php esc_attr( $NHP_Options->show('sample_download_link_text') );?>
-		</a>
+
 	</p>
-	<?php } ?>	
-</div>			
+	<?php } ?>
+
+
+</div>
 <?php } ?>
