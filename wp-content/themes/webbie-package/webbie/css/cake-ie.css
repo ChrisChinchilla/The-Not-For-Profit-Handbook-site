@@ -1,0 +1,103 @@
+.sidebar.nano  {
+	height: auto!important;
+	bottom: 45px!important;
+}
+.sidebar_toolbar {
+	min-width: 25%!important;
+}
+
+.masthead .action_link .nav_divider,
+.sidebar_call_to_action .action_link .nav_divider {
+	display: none;
+	filter: none
+}
+
+
+
+/************************************************************************************
+smaller than 800
+*************************************************************************************/
+
+
+@media screen and (max-width: 800px) {
+
+
+/* 
+standardizing off-canvas 
+in IE is a pain. For now, we
+just override that functionality.
+The sidebar will appear below
+the main content as
+*/
+
+	/* 	ie sidebar */
+	.sidebar {
+		display: block;
+		float: none;
+		position: relative;
+		width: 100%;
+	}
+	.sidebar.nano .content {
+		overflow: visible!important;
+		border-top: 1px solid #DDD; 
+		position: relative;
+	}
+	.nav-btn, .close-btn {
+		display: none;
+		visibility: hidden;
+	}
+
+
+	/* override some media queries */
+	.js-ready #nav {
+		height: auto!important;
+		width: 100%!important;
+		border-right: none;
+		-webkit-box-shadow: none!important;
+		   -moz-box-shadow: none!important;
+				box-shadow: none!important;
+		
+	}
+
+	#nav {
+		padding-top: 0!important;
+		position: relative!important;;
+	}
+	.csstransforms3d.csstransitions.js-ready #nav {
+		left: 0;
+		-webkit-transform: none!important;
+		   -moz-transform: none!important;
+		    -ms-transform: none!important;
+			 -o-transform: none!important;
+				transform: none!important;
+				
+		-webkit-backface-visibility: hidden;
+		   -moz-backface-visibility: hidden;
+		    -ms-backface-visibility: hidden;
+			 -o-backface-visibility: hidden;
+				backface-visibility: hidden;
+	}
+	
+	
+	.js-ready #nav .block {
+		background: transparent;
+	}
+	.js-ready #nav .close-btn {
+		display: block;
+		filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+		opacity: 0.7;
+	}
+	.js-ready #nav .close-btn:focus, .js-ready #nav .close-btn:hover {
+		filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+		opacity: 1;
+	}
+	
+	.js-ready #nav,
+	.js-ready #inner-wrap,
+	.js-nav #inner-wrap  {
+		left: 0!important;
+	}
+	
+	
+
+}

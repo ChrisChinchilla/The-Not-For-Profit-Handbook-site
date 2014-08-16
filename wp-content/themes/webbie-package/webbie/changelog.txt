@@ -1,0 +1,5 @@
+*** Webbie Changelog ***
+
+09 May 2013 - Version 1.0
+
+	First Release

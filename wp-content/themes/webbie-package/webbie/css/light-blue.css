@@ -1,0 +1,158 @@
+/* masthead */
+.customizable_wrapper,
+.reviews_block {
+	background: #b3dced!important;
+	background: -moz-radial-gradient(center, ellipse cover,  #b3dced 0%, #29b8e5 100%)!important;
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#b3dced), color-stop(100%,#29b8e5))!important;
+	background: -webkit-radial-gradient(center, ellipse cover,  #b3dced 0%,#29b8e5 100%)!important;
+	background: -o-radial-gradient(center, ellipse cover,  #b3dced 0%,#29b8e5 100%)!important;
+	background: -ms-radial-gradient(center, ellipse cover,  #b3dced 0%,#29b8e5 100%)!important;
+	background: radial-gradient(ellipse at center,  #b3dced 0%,#29b8e5 100%)!important;
+	    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#29b8e5',GradientType=1 )!important;
+}
+
+/* header */
+.header {
+	background: #3F75A7!important;
+	color: #CCC!important;
+	border-bottom: 1px solid #111317!important;
+	border-top: 4px solid #111317!important;
+	text-shadow: 1px 1px 0 #111317!important;
+}
+
+
+/*nav menu */
+.main_nav ul li a:hover, 
+.main_nav ul li.current_page_item > a, 
+.main_nav ul li.current-menu-parent > a, 
+.sf-menu ul li.current_page_item a, 
+.sf-menu ul li.current-menu-item a,
+
+.bottom_toolbar .content_nav span a:hover, .other_actions .action_block a:hover, .other_actions .action_block a.engaged_action {
+	background: #0b1823!important;
+	background: -moz-linear-gradient(top,  #0b1823 0%, #3f75a7 100%)!important;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0b1823), color-stop(100%,#3f75a7))!important;
+	background: -webkit-linear-gradient(top,  #0b1823 0%,#3f75a7 100%)!important;
+	background: -o-linear-gradient(top,  #0b1823 0%,#3f75a7 100%)!important;
+	background: -ms-linear-gradient(top,  #0b1823 0%,#3f75a7 100%)!important;
+	background: linear-gradient(to bottom,  #0b1823 0%,#3f75a7 100%)!important;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0b1823', endColorstr='#3f75a7',GradientType=0 )!important;
+}
+.bottom_toolbar .content_nav span a:hover, .other_actions .action_block a:hover, .other_actions .action_block a.engaged_action {
+	color: #FFF!important;
+}
+.nav_divider .darker, .split_darker {
+	background: #073E85!important;
+}
+.nav_divider .lighter, .split_lighter {
+	background: #4194BB!important;
+}
+/*drop down menu*/
+.sf-menu ul li {
+	background: #3F75A7!important;
+}
+.sf-menu ul li a {
+	border-bottom: 1px solid #073E85!important;
+	border-top: 1px solid #4194BB!important;
+}
+
+/* reviews */
+.reviews_block {
+	color: #0D2336;
+	-webkit-box-shadow: inset 0 -9px 11px -5px rgba(2, 11, 27, .5), inset 0 9px 11px -5px rgba(2, 11, 27, .5)!important;
+	   -moz-box-shadow: inset 0 -9px 11px -5px rgba(2, 11, 27, .5), inset 0 9px 11px -5px rgba(2, 11, 27, .5)!important;
+			box-shadow: inset 0 -9px 11px -5px rgba(2, 11, 27, .5), inset 0 9px 11px -5px rgba(2, 11, 27, .5)!important;
+}
+.reviews_block .reviews .reviewer_pic img {
+	border: 1px solid #0D2336!important;
+}
+.review_pullquote {
+	color: #0D2336!important;
+	text-shadow: 1px 1px 0 #f8ffe8!important;
+}
+
+/* bottom toolbar */
+.bottom_toolbar {
+	background: #3F75A7!important;
+	border-left: none!important;	
+	border-top: 1px solid #111317!important;
+}
+.sidebar_toolbar {
+	background: none!important;
+}
+
+
+.divider,
+.close_right_content {
+	background: #3F75A7!important;
+}
+.toc_nav ul li a:hover, 
+#recentcomments li.recentcomments:hover, 
+.widget.widget_recent_entries ul li:hover, 
+.widget ul li:hover,
+
+.toc_nav ul li.current_page_item a, 
+.toc_nav ul li.current-menu-item a {
+	border-left: 5px solid #3F75A7!important;
+}
+a:hover, 
+a:active,
+article.hentry blockquote,
+article p:nth-of-type(1)::first-letter,
+.meta_details .meta_pullquote [class^="icon-"], 
+.meta_details .meta_pullquote [class*=" icon-"],
+.author_links a { 
+	color: #3F75A7!important;
+}
+
+
+.sidebar aside .section_title, 
+.sidebar .widget h3,
+
+.cats_and_tags li a, 
+.wp-tag-cloud li a, 
+.tagcloud a {
+	background: #3F75A7!important;
+}
+
+.bottom_toolbar a,
+.bottom_toolbar .content_nav span a {
+	color: #FFF!important;
+}
+
+.sidebar aside .section_title .nav_divider, 
+.sidebar .widget h3 .nav_divider {
+	top: 0!important;
+}
+
+/*
+selection enhancement
+---------------------------
+---------------------------
+*/
+::selection {
+	background: #3F75A7!important;
+	color: #FFF!important;
+}
+::-moz-selection {
+	background: #3F75A7!important;
+	color: #FFF!important;
+}
+
+
+
+
+/*
+media queries
+---------------------------
+---------------------------
+*/
+
+@media screen and (max-width: 800px) {
+	.main_nav {
+		border-top: 1px solid #4194BB!important;
+		box-shadow: 0 -1px 0 #073E85!important;
+	}
+}
+
+
