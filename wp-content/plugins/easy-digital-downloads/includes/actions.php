@@ -4,16 +4,16 @@
  *
  * @package     EDD
  * @subpackage  Functions
- * @copyright   Copyright (c) 2014, Pippin Williamson
+ * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.8.1
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Hooks EDD actions, when present in the $_GET superglobal. Every edd_action
+ * Hooks EDD actions, when present in the $_GET superglobal. Every edd_aciton
  * present in $_GET is called using WordPress's do_action function. These
  * functions are called on init.
  *
@@ -28,7 +28,7 @@ function edd_get_actions() {
 add_action( 'init', 'edd_get_actions' );
 
 /**
- * Hooks EDD actions, when present in the $_POST superglobal. Every edd_action
+ * Hooks EDD actions, when present in the $_POST superglobal. Every edd_aciton
  * present in $_POST is called using WordPress's do_action function. These
  * functions are called on init.
  *

@@ -20,15 +20,18 @@
  * @since 1.4.4
  */
 class EDD_Roles {
-
 	/**
 	 * Get things going
 	 *
+	 * @access public
 	 * @since 1.4.4
+	 * @see EDD_Roles::add_roles()
+	 * @see EDD_Roles::add_caps()
+	 * @return void
 	 */
 	public function __construct() {
-
-		add_filter( 'map_meta_cap', array( $this, 'meta_caps' ), 10, 4 );
+		$this->add_roles();
+		$this->add_caps();
 	}
 
 	/**
@@ -57,6 +60,7 @@ class EDD_Roles {
 			'edit_others_pages'      => true,
 			'edit_others_posts'      => true,
 			'edit_pages'             => true,
+			'edit_posts'             => true,
 			'edit_private_pages'     => true,
 			'edit_private_posts'     => true,
 			'edit_published_pages'   => true,
@@ -96,7 +100,7 @@ class EDD_Roles {
 	 *
 	 * @access public
 	 * @since  1.4.4
-	 * @global WP_Roles $wp_roles
+	 * @global obj $wp_roles
 	 * @return void
 	 */
 	public function add_caps() {
@@ -147,11 +151,11 @@ class EDD_Roles {
 	}
 
 	/**
-	 * Gets the core post type capabilities
+	 * Gets the core post type capabilties
 	 *
 	 * @access public
 	 * @since  1.4.4
-	 * @return array $capabilities Core post type capabilities
+	 * @return array $capabilities Core post type capabilties
 	 */
 	public function get_core_caps() {
 		$capabilities = array();
@@ -179,43 +183,11 @@ class EDD_Roles {
 				"manage_{$capability_type}_terms",
 				"edit_{$capability_type}_terms",
 				"delete_{$capability_type}_terms",
-				"assign_{$capability_type}_terms",
-
-				// Custom
-				"view_{$capability_type}_stats"
+				"assign_{$capability_type}_terms"
 			);
 		}
 
 		return $capabilities;
-	}
-
-	/**
-	 * Map meta caps to primitive caps
-	 *
-	 * @access public
-	 * @since  2.0
-	 * @return array $caps
-	 */
-	public function meta_caps( $caps, $cap, $user_id, $args ) {
-
-		switch( $cap ) {
-
-			case 'view_product_stats' :
-
-				$download = get_post( $args[0] );
-				if ( empty( $download ) ) {
-					break;
-				}
-
-				if( user_can( $user_id, 'view_shop_reports' ) || $user_id == $download->post_author ) {
-					$caps = array();
-				}
-
-				break;
-		}
-
-		return $caps;
-
 	}
 
 	/**

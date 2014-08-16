@@ -8,7 +8,7 @@
  *
  * @package     EDD
  * @subpackage  Functions/Taxes
- * @copyright   Copyright (c) 2014, Pippin Williamson
+ * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3.3
 */
@@ -31,6 +31,68 @@ function edd_use_taxes() {
 }
 
 /**
+ * Check if only local taxes are enabled meaning users must opt in by using the
+ * option set from the EDD Settings.
+ *
+ * @since 1.3.3
+ * @global $edd_options
+ * @return bool $local_only
+ */
+function edd_local_taxes_only() {
+	global $edd_options;
+
+	$local_only = isset( $edd_options['tax_condition'] ) && $edd_options['tax_condition'] == 'local';
+
+	return apply_filters( 'edd_local_taxes_only', $local_only );
+}
+
+/**
+ * Checks if a customer has opted into local taxes
+ *
+ * @since 1.4.1
+ * @uses EDD_Session::get()
+ * @return bool
+ */
+function edd_local_tax_opted_in() {
+	$opted_in = EDD()->session->get( 'edd_local_tax_opt_in' );
+	return ! empty( $opted_in );
+}
+
+/**
+ * Sets a customer as opted into local taxes
+ *
+ * @since 1.4.1
+ * @uses EDD_Session::get()
+ * @return bool
+*/
+function edd_opt_into_local_taxes() {
+	EDD()->session->set( 'edd_local_tax_opt_in', '1' );
+}
+
+/**
+ * Sets a customer as opted out of local taxes
+ *
+ * @since 1.4.1
+ * @uses EDD_Session::get()
+ * @return bool
+ */
+function edd_opt_out_local_taxes() {
+	EDD()->session->set( 'edd_local_tax_opt_in', null);
+}
+
+/**
+ * Show taxes on individual prices?
+ *
+ * @since 1.4
+ * @global $edd_options
+ * @return bool Whether or not to show taxes on prices
+ */
+function edd_taxes_on_prices() {
+	global $edd_options;
+	return apply_filters( 'edd_taxes_on_prices', isset( $edd_options['taxes_on_prices'] ) );
+}
+
+/**
  * Checks if the user has enabled the option to calculate taxes after discounts
  * have been entered
  *
@@ -40,21 +102,7 @@ function edd_use_taxes() {
  */
 function edd_taxes_after_discounts() {
 	global $edd_options;
-	$ret = isset( $edd_options['taxes_after_discounts'] ) && edd_use_taxes();
-	return apply_filters( 'edd_taxes_after_discounts', $ret );
-}
-
-/**
- * Retrieve tax rates
- *
- * @since 1.6
- * @global $edd_options
- * @return array Defined tax rates
- */
-function edd_get_tax_rates() {
-
-	$rates = get_option( 'edd_tax_rates', array() );
-	return apply_filters( 'edd_get_tax_rates', $rates );
+	return apply_filters( 'edd_taxes_after_discounts', isset( $edd_options['taxes_after_discounts'] ) );
 }
 
 /**
@@ -62,85 +110,18 @@ function edd_get_tax_rates() {
  *
  * @since 1.3.3
  * @global $edd_options
- *
- * @param bool $country
- * @param bool $state
- * @return mixed|void
+ * @return float $trate Taxation rate
  */
-function edd_get_tax_rate( $country = false, $state = false ) {
+function edd_get_tax_rate() {
 	global $edd_options;
 
 	$rate = isset( $edd_options['tax_rate'] ) ? (float) $edd_options['tax_rate'] : 0;
-
-	$user_address = edd_get_customer_address();
-
-	if( empty( $country ) ) {
-		if( ! empty( $_POST['billing_country'] ) ) {
-			$country = $_POST['billing_country'];
-		} elseif( is_user_logged_in() && ! empty( $user_address ) ) {
-			$country = $user_address['country'];
-		}
-		$country = ! empty( $country ) ? $country : edd_get_shop_country();
-	}
-
-	if( empty( $state ) ) {
-		if( ! empty( $_POST['state'] ) ) {
-			$state = $_POST['state'];
-		} elseif( is_user_logged_in() && ! empty( $user_address ) ) {
-			$state = $user_address['state'];
-		}
-		$state = ! empty( $state ) ? $state : edd_get_shop_state();
-	}
-
-	if( ! empty( $country ) ) {
-		$tax_rates   = edd_get_tax_rates();
-
-		if( ! empty( $tax_rates ) ) {
-
-			// Locate the tax rate for this country / state, if it exists
-			foreach( $tax_rates as $key => $tax_rate ) {
-
-				if( $country != $tax_rate['country'] )
-					continue;
-
-				if( ! empty( $tax_rate['global'] ) ) {
-					if( ! empty( $tax_rate['rate'] ) ) {
-						$rate = number_format( $tax_rate['rate'], 4 );
-					}
-				} else {
-
-					if( empty( $tax_rate['state'] ) || strtolower( $state ) != strtolower( $tax_rate['state'] ) )
-						continue;
-
-					$state_rate = $tax_rate['rate'];
-					if( 0 !== $state_rate || ! empty( $state_rate ) ) {
-						$rate = number_format( $state_rate, 4 );
-					}
-				}
-			}
-		}
-	}
 
 	if( $rate > 1 ) {
 		// Convert to a number we can use
 		$rate = $rate / 100;
 	}
-	return apply_filters( 'edd_tax_rate', $rate, $country, $state );
-}
-
-/**
- * Retrieve a fully formatted tax rate
- *
- * @since 1.9
- * @param string $country The country to retrieve a rate for
- * @param string $state The state to retrieve a rate for
- * @return string Formatted rate
- */
-function edd_get_formatted_tax_rate( $country = false, $state = false ) {
-	$rate = edd_get_tax_rate( $country, $state );
-	$rate = round( $rate * 100, 4 );
-	$formatted = $rate .= '%';
-	return apply_filters( 'edd_formatted_tax_rate', $formatted, $rate, $country, $state );
+	return apply_filters( 'edd_tax_rate', $rate );
 }
 
 /**
@@ -148,28 +129,34 @@ function edd_get_formatted_tax_rate( $country = false, $state = false ) {
  *
  * @since 1.3.3
  * @param $amount float The original amount to calculate a tax cost
- * @param $country string The country to calculate tax for. Will use default if not passed
- * @param $state string The state to calculate tax for. Will use default if not passed
  * @return float $tax Taxed amount
  */
-function edd_calculate_tax( $amount = 0, $country = false, $state = false ) {
+function edd_calculate_tax( $amount, $sum = true ) {
 	global $edd_options;
 
-	$rate = edd_get_tax_rate( $country, $state );
-	$tax  = 0.00;
+	// Not using taxes
+	if ( ! edd_use_taxes() ) return $amount;
 
-	if ( edd_use_taxes() ) {
+	$rate = edd_get_tax_rate();
+	$tax = 0.00;
+	$prices_include_tax = edd_prices_include_tax();
 
-		if ( edd_prices_include_tax() ) {
-			$pre_tax = ( $amount / ( 1 + $rate ) );
-			$tax     = $amount - $pre_tax;
+	if ( $prices_include_tax ) {
+		$tax = $amount - ( $amount / ( $rate + 1 ) );
+	} else {
+		$tax = $amount * $rate;
+	}
+
+	if ( $sum ) {
+
+		if ( $prices_include_tax ) {
+			$tax = $amount - $tax;
 		} else {
-			$tax = $amount * $rate;
+			$tax = $amount + $tax;
 		}
 
 	}
-
-	return apply_filters( 'edd_taxed_amount', $tax, $rate, $country, $state );
+	return apply_filters( 'edd_taxed_amount', round( $tax, 2 ), $rate );
 }
 
 /**
@@ -193,45 +180,46 @@ function edd_sales_tax_for_year( $year = null ) {
  * @return float $tax Sales tax
  */
 function edd_get_sales_tax_for_year( $year = null ) {
-	
-	if ( ! empty( $year ) ) {
+	if ( empty( $year ) )
+		return 0;
 
-		// Start at zero
-		$tax = 0;
+	// Start at zero
+	$tax = 0;
 
-		$args = array(
-			'post_type' 		=> 'edd_payment',
-			'post_status'       => array( 'publish', 'revoked' ),
-			'posts_per_page' 	=> -1,
-			'year' 				=> $year,
-			'fields'			=> 'ids'
-		);
+	$args = array(
+		'post_type' 		=> 'edd_payment',
+		'posts_per_page' 	=> -1,
+		'year' 				=> $year,
+		'meta_key' 			=> '_edd_payment_mode',
+		'meta_value' 		=> edd_is_test_mode() ? 'test' : 'live',
+		'fields'			=> 'ids'
+	);
 
-		$payments = get_posts( $args );
+	$payments = get_posts( $args );
 
-		if( $payments ) {
+	if( $payments ) :
 
-			foreach( $payments as $payment ) {
-				$tax += edd_get_payment_tax( $payment );
-			}
+		foreach( $payments as $payment ) :
+			$tax += edd_get_payment_tax( $payment );
+		endforeach;
 
-		}
-
-	}
+	endif;
 
 	return apply_filters( 'edd_get_sales_tax_for_year', $tax, $year );
 }
 
+
 /**
- * Is the cart taxed?
- *
- * This used to include a check for local tax opt-in, but that was ripped out in v1.6, so this is just a wrapper now
+ * Checks whether the user has enabled display of taxes on the checkout
  *
  * @since 1.5
- * @return bool
+ * @global $edd_options
+ * @return bool $include_tax
  */
-function edd_is_cart_taxed() {
-	return edd_use_taxes();
+function edd_prices_show_tax_on_checkout() {
+	global $edd_options;
+
+	return isset( $edd_options['checkout_include_tax'] ) && $edd_options['checkout_include_tax'] == 'yes';
 }
 
 /**
@@ -244,63 +232,15 @@ function edd_is_cart_taxed() {
 function edd_prices_include_tax() {
 	global $edd_options;
 
-	$ret = isset( $edd_options['prices_include_tax'] ) && $edd_options['prices_include_tax'] == 'yes' && edd_use_taxes();
-
-	return apply_filters( 'edd_prices_include_tax', $ret );
+	return isset( $edd_options['prices_include_tax'] ) && $edd_options['prices_include_tax'] == 'yes';
 }
 
 /**
- * Checks whether the user has enabled display of taxes on the checkout
+ * Is the cart taxed?
  *
  * @since 1.5
- * @global $edd_options
- * @return bool $include_tax
- */
-function edd_prices_show_tax_on_checkout() {
-	global $edd_options;
-	$ret = isset( $edd_options['checkout_include_tax'] ) && $edd_options['checkout_include_tax'] == 'yes' && edd_use_taxes();
-	return apply_filters( 'edd_taxes_on_prices_on_checkout', $ret );
-}
-
-/**
- * Check to see if we should show included taxes
- *
- * Some countries (notably in the EU) require included taxes to be displayed.
- *
- * @since 1.7
- * @author Daniel J Griffiths
  * @return bool
  */
-function edd_display_tax_rate() {
-	global $edd_options;
-
-	$ret = edd_use_taxes() && isset( $edd_options['display_tax_rate'] );
-
-	return apply_filters( 'edd_display_tax_rate', $ret );
-}
-
-/**
- * Should we show address fields for taxation purposes?
- *
- * @since 1.y
- * @return bool
- */
-function edd_cart_needs_tax_address_fields() {
-
-	if( ! edd_is_cart_taxed() )
-		return false;
-
-	return ! did_action( 'edd_after_cc_fields', 'edd_default_cc_address_fields' );
-
-}
-
-/**
- * Is this Download excluded from tax?
- *
- * @since 1.9
- * @return bool
- */
-function edd_download_is_tax_exclusive( $download_id = 0 ) {
-	$ret = (bool) get_post_meta( $download_id, '_edd_download_tax_exclusive', true );
-	return apply_filters( 'edd_download_is_tax_exclusive', $ret, $download_id );
+function edd_is_cart_taxed() {
+	return edd_use_taxes() && ( ( edd_local_tax_opted_in() && edd_local_taxes_only() ) || ! edd_local_taxes_only() );
 }

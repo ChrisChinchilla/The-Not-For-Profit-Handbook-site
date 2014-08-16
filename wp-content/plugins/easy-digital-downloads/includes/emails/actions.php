@@ -4,7 +4,7 @@
  *
  * @package     EDD
  * @subpackage  Emails
- * @copyright   Copyright (c) 2014, Pippin Williamson
+ * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.8.2
  */
@@ -17,17 +17,27 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @since 1.0.8.4
  * @param int $payment_id Payment ID
+ * @param string $new_status New Payment Status (e.g. Complete)
+ * @param string $old_status Old Payment Status (e.g. Pending)
  * @return void
  */
-function edd_trigger_purchase_receipt( $payment_id ) {
+function edd_trigger_purchase_receipt( $payment_id, $new_status, $old_status ) {
 	// Make sure we don't send a purchase receipt while editing a payment
-	if ( isset( $_POST['edd-action'] ) && 'edit_payment' == $_POST['edd-action'] )
+	if ( isset( $_POST['edd-action'] ) && $_POST['edd-action'] == 'edit_payment' )
+		return;
+
+	// Check if the payment was already set to complete
+	if ( $old_status == 'publish' || $old_status == 'complete' )
+		return; // Make sure that payments are only completed once
+
+	// Make sure the receipt is only sent when new status is complete
+	if ( $new_status != 'publish' && $new_status != 'complete' )
 		return;
 
 	// Send email with secure download link
 	edd_email_purchase_receipt( $payment_id );
 }
-add_action( 'edd_complete_purchase', 'edd_trigger_purchase_receipt', 999, 1 );
+add_action( 'edd_update_payment_status', 'edd_trigger_purchase_receipt', 10, 3 );
 
 /**
  * Resend the Email Purchase Receipt. (This can be done from the Payment History page)
@@ -62,7 +72,7 @@ add_action( 'edd_email_links', 'edd_resend_purchase_receipt' );
  * Trigger the sending of a Test Email
  *
  * @since 1.5
- * @param array $data Parameters sent from Settings page
+ * @param array $data Paramaters sent from Settings page
  * @return void
  */
 function edd_send_test_email( $data ) {
@@ -70,9 +80,6 @@ function edd_send_test_email( $data ) {
 		return;
 
 	// Send a test email
-    edd_email_test_purchase_receipt();
-
-    // Remove the test email query arg
-    wp_redirect( remove_query_arg( 'edd_action' ) ); exit;
+	edd_email_test_purchase_receipt();
 }
 add_action( 'edd_send_test_email', 'edd_send_test_email' );

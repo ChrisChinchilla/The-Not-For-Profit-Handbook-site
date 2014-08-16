@@ -4,7 +4,7 @@
  *
  * @package     EDD
  * @subpackage  Admin/Discounts
- * @copyright   Copyright (c) 2014, Pippin Williamson
+ * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.4
  */
@@ -62,9 +62,11 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 	/**
 	 * Get things started
 	 *
+	 * @access public
 	 * @since 1.4
 	 * @uses EDD_Discount_Codes_Table::get_discount_code_counts()
 	 * @see WP_List_Table::__construct()
+	 * @return void
 	 */
 	public function __construct() {
 		global $status, $page;
@@ -142,6 +144,7 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'cb'        => '<input type="checkbox" />',
+			'ID'     	=> __( 'ID', 'edd' ),
 			'name'  	=> __( 'Name', 'edd' ),
 			'code'  	=> __( 'Code', 'edd' ),
 			'amount'  	=> __( 'Amount', 'edd' ),
@@ -164,6 +167,7 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 	 */
 	public function get_sortable_columns() {
 		return array(
+			'ID'     => array( 'ID', true ),
 			'name'   => array( 'name', false )
 		);
 	}
@@ -201,17 +205,16 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 
 		$row_actions['edit'] = '<a href="' . add_query_arg( array( 'edd-action' => 'edit_discount', 'discount' => $discount->ID ) ) . '">' . __( 'Edit', 'edd' ) . '</a>';
 
-		if( strtolower( $item['status'] ) == 'active' ) {
-			$row_actions['deactivate'] = '<a href="' . add_query_arg( array( 'edd-action' => 'deactivate_discount', 'discount' => $discount->ID ) ) . '">' . __( 'Deactivate', 'edd' ) . '</a>';
-		} elseif( strtolower( $item['status'] ) == 'inactive' ) {
+		if( strtolower( $item['status'] ) == 'active' )
+			$row_actions['deactivate'] = '<a href="' . add_query_arg( array( 'edd-action' => 'deactivate_discount', 'discount' => $discount->ID ) ) . '">' . __( 'Deactive', 'edd' ) . '</a>';
+		else
 			$row_actions['activate'] = '<a href="' . add_query_arg( array( 'edd-action' => 'activate_discount', 'discount' => $discount->ID ) ) . '">' . __( 'Activate', 'edd' ) . '</a>';
-		}
 
 		$row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'edd-action' => 'delete_discount', 'discount' => $discount->ID ) ), 'edd_discount_nonce' ) . '">' . __( 'Delete', 'edd' ) . '</a>';
 
 		$row_actions = apply_filters( 'edd_discount_row_actions', $row_actions, $discount );
 
-		return stripslashes( $item['name'] ) . $this->row_actions( $row_actions );
+		return $item['name'] . $this->row_actions( $row_actions );
 	}
 
 	/**
@@ -225,43 +228,9 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 	function column_cb( $item ) {
 		return sprintf(
 			'<input type="checkbox" name="%1$s[]" value="%2$s" />',
-			/*$1%s*/ 'discount',
+			/*$1%s*/ $this->_args['singular'],
 			/*$2%s*/ $item['ID']
 		);
-	}
-
-	/**
-	 * Render the status column
-	 *
-	 * @access public
-	 * @since 1.9.9
-	 * @param array $item Contains all the data for the checkbox column
-	 * @return string Displays the discount status
-	 */
-	function column_status( $item ) {
-		switch( $item['status'] ){
-			case 'expired' :
-				$status = __( 'Expired', 'edd' );
-				break;
-			case 'inactive' :
-				$status = __( 'Inactive', 'edd' );
-				break;
-			case 'active' :
-			default :
-				$status = __( 'Active', 'edd' );
-				break;
-		}
-		return $status;
-	}
-
-	/**
-	 * Message to be displayed when there are no items
-	 *
-	 * @since 1.7.2
-	 * @access public
-	 */
-	function no_items() {
-		_e( 'No discounts found.', 'edd' );
 	}
 
 	/**
@@ -273,9 +242,7 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 	 */
 	public function get_bulk_actions() {
 		$actions = array(
-			'activate'   => __( 'Activate', 'edd' ),
-			'deactivate' => __( 'Deactivate', 'edd' ),
-			'delete'     => __( 'Delete', 'edd' )
+			'delete' => __( 'Delete', 'edd' )
 		);
 
 		return $actions;
@@ -289,7 +256,7 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function process_bulk_action() {
-		$ids = isset( $_GET['discount'] ) ? $_GET['discount'] : false;
+		$ids = isset( $_GET['download'] ) ? $_GET['download'] : false;
 
 		if ( ! is_array( $ids ) )
 			$ids = array( $ids );
@@ -297,12 +264,6 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 		foreach ( $ids as $id ) {
 			if ( 'delete' === $this->current_action() ) {
 				edd_remove_discount( $id );
-			}
-			if ( 'activate' === $this->current_action() ) {
-				edd_update_discount_status( $id, 'active' );
-			}
-			if ( 'deactivate' === $this->current_action() ) {
-				edd_update_discount_status( $id, 'inactive' );
 			}
 		}
 
@@ -332,7 +293,11 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 	public function discount_codes_data() {
 		$discount_codes_data = array();
 
+		if ( isset( $_GET['paged'] ) ) $page = $_GET['paged']; else $page = 1;
+
 		$per_page = $this->per_page;
+
+		$mode = edd_is_test_mode() ? 'test' : 'live';
 
 		$orderby 		= isset( $_GET['orderby'] )  ? $_GET['orderby']                  : 'ID';
 		$order 			= isset( $_GET['order'] )    ? $_GET['order']                    : 'DESC';
@@ -344,7 +309,7 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 
 		$discounts = edd_get_discounts( array(
 			'posts_per_page' => $per_page,
-			'paged'          => isset( $_GET['paged'] ) ? $_GET['paged'] : 1,
+			'page'           => isset( $_GET['paged'] ) ? $_GET['paged'] : null,
 			'orderby'        => $orderby,
 			'order'          => $order,
 			'post_status'    => $status,
@@ -375,7 +340,7 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 				}
 
 				if ( edd_get_discount_expiration( $discount->ID ) ) {
-					$expiration = date_i18n( get_option( 'date_format' ), strtotime( edd_get_discount_expiration( $discount->ID ) ) );
+					$expiration = edd_is_discount_expired( $discount->ID ) ? __( 'Expired', 'edd' ) : date_i18n( get_option( 'date_format' ), strtotime( edd_get_discount_expiration( $discount->ID ) ) );
 				} else {
 					$expiration = __( 'No expiration', 'edd' );
 				}
@@ -389,7 +354,7 @@ class EDD_Discount_Codes_Table extends WP_List_Table {
 					'max_uses' 		=> $max_uses,
 					'start_date' 	=> $discount_start_date,
 					'expiration'	=> $expiration,
-					'status'		=> edd_is_discount_expired( $discount->ID ) ? 'expired' : $discount->post_status,
+					'status'		=> ucwords( $discount->post_status ),
 				);
 			}
 		}

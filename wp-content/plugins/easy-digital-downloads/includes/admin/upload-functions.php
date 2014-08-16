@@ -4,14 +4,13 @@
  *
  * @package     EDD
  * @subpackage  Admin/Upload
- * @copyright   Copyright (c) 2014, Pippin Williamson
+ * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
-
 
 /**
  * Change Downloads Upload Directory
@@ -31,13 +30,44 @@ function edd_change_downloads_upload_dir() {
 
 	if ( ! empty( $_REQUEST['post_id'] ) && ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) ) {
 		if ( 'download' == get_post_type( $_REQUEST['post_id'] ) ) {
-			edd_create_protection_files( true );
+			$wp_upload_dir = wp_upload_dir();
+			$upload_path = $wp_upload_dir['basedir'] . '/edd' . $wp_upload_dir['subdir'];
+
+			// We don't want users snooping in the EDD root, so let's add htacess there, first
+			// Creating the directory if it doesn't already exist.
+			$rules = apply_filters( 'edd_protected_directory_htaccess_rules', 'Options -Indexes' );
+			if ( !@file_get_contents( $wp_upload_dir['basedir'] . '/edd/.htaccess' ) ) {
+				wp_mkdir_p( $wp_upload_dir['basedir'] . '/edd' );
+			}
+			@file_put_contents( $wp_upload_dir['basedir'] . '/edd/.htaccess', $rules );
+
+			// Now add blank index.php files to the {year}/{month} directory
+			if ( wp_mkdir_p( $upload_path ) ) {
+				if( ! file_exists( $upload_path . '/index.php' ) ) {
+					@file_put_contents( $upload_path . '/index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
+				}
+			}
 			add_filter( 'upload_dir', 'edd_set_upload_dir' );
 		}
 	}
 }
 add_action( 'admin_init', 'edd_change_downloads_upload_dir', 999 );
 
+/**
+ * Set Upload Directory
+ *
+ * Sets the upload dir to edd. This function is called from
+ * edd_change_downloads_upload_dir()
+ *
+ * @since 1.0
+ * @return array Upload directory information
+*/
+function edd_set_upload_dir( $upload ) {
+	$upload['subdir'] = '/edd' . $upload['subdir'];
+	$upload['path'] = $upload['basedir'] . $upload['subdir'];
+	$upload['url']	= $upload['baseurl'] . $upload['subdir'];
+	return $upload;
+}
 
 /**
  * Creates blank index.php and .htaccess files
@@ -46,62 +76,42 @@ add_action( 'admin_init', 'edd_change_downloads_upload_dir', 999 );
  * have their necessary protection files
  *
  * @since 1.1.5
- *
- * @param bool $force
- * @param bool $method
+ * @return void
  */
+function edd_create_protection_files() {
+	if ( false === get_transient( 'edd_check_protection_files' ) ) {
+		$wp_upload_dir = wp_upload_dir();
+		$upload_path = $wp_upload_dir['basedir'] . '/edd';
 
-function edd_create_protection_files( $force = false, $method = false ) {
-	if ( false === get_transient( 'edd_check_protection_files' ) || $force ) {
-
-		$upload_path = edd_get_upload_dir();
-
-		// Make sure the /edd folder is created
 		wp_mkdir_p( $upload_path );
 
-		// Top level .htaccess file
-		$rules = edd_get_htaccess_rules( $method );
-		if ( edd_htaccess_exists() ) {
-			$contents = @file_get_contents( $upload_path . '/.htaccess' );
-			if ( $contents !== $rules || ! $contents ) {
-				// Update the .htaccess rules if they don't match
-				@file_put_contents( $upload_path . '/.htaccess', $rules );
-			}
-		} elseif( wp_is_writable( $upload_path ) ) {
-			// Create the file if it doesn't exist
-			@file_put_contents( $upload_path . '/.htaccess', $rules );
+		// Top level blank index.php
+		if ( ! file_exists( $upload_path . '/index.php' ) ) {
+			@file_put_contents( $upload_path . '/index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
 		}
 
-		// Top level blank index.php
-		if ( ! file_exists( $upload_path . '/index.php' ) && wp_is_writable( $upload_path ) ) {
-			@file_put_contents( $upload_path . '/index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
+		// Top level .htaccess file
+		$rules = apply_filters( 'edd_protected_directory_htaccess_rules', 'Options -Indexes' );
+		if ( file_exists( $upload_path . '/.htaccess' ) ) {
+			$contents = @file_get_contents( $upload_path . '/.htaccess' );
+			if ( false === strpos( $contents, 'Options -Indexes' ) || ! $contents ) {
+				@file_put_contents( $upload_path . '/.htaccess', $rules );
+			}
 		}
 
 		// Now place index.php files in all sub folders
 		$folders = edd_scan_folders( $upload_path );
 		foreach ( $folders as $folder ) {
 			// Create index.php, if it doesn't exist
-			if ( ! file_exists( $folder . 'index.php' ) && wp_is_writable( $folder ) ) {
+			if ( ! file_exists( $folder . 'index.php' ) ) {
 				@file_put_contents( $folder . 'index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
 			}
 		}
-		// Check for the files once per day
-		set_transient( 'edd_check_protection_files', true, 3600 * 24 );
+		// Only have this run the first time. This is just to create .htaccess files in existing folders
+		set_transient( 'edd_check_protection_files', true, 2678400 );
 	}
 }
 add_action( 'admin_init', 'edd_create_protection_files' );
-
-/**
- * Checks if the .htaccess file exists in wp-content/uploads/edd
- *
- * @since 1.8
- * @return bool
- */
-function edd_htaccess_exists() {
-	$upload_path = edd_get_upload_dir();
-
-	return file_exists( $upload_path . '/.htaccess' );
-}
 
 /**
  * Scans all folders inside of /uploads/edd
@@ -125,65 +135,4 @@ function edd_scan_folders( $path = '', $return = array() ) {
 	}
 
 	return $return;
-}
-
-/**
- * Retrieve the .htaccess rules to wp-content/uploads/edd/
- *
- * @since 1.6
- *
- * @param bool $method
- * @return mixed|void The htaccess rules
- */
-function edd_get_htaccess_rules( $method = false ) {
-
-	if( empty( $method ) )
-		$method = edd_get_file_download_method();
-
-	switch( $method ) :
-
-		case 'redirect' :
-			// Prevent directory browsing
-			$rules = "Options -Indexes";
-			break;
-
-		case 'direct' :
-		default :
-			// Prevent directory browsing and direct access to all files, except images (they must be allowed for featured images / thumbnails)
-			$rules = "Options -Indexes\n";
-			$rules .= "deny from all\n";
-			$rules .= "<FilesMatch '\.(jpg|png|gif|mp3|ogg)$'>\n";
-			    $rules .= "Order Allow,Deny\n";
-			    $rules .= "Allow from all\n";
-			$rules .= "</FilesMatch>\n";
-			break;
-
-	endswitch;
-	$rules = apply_filters( 'edd_protected_directory_htaccess_rules', $rules, $method );
-	return $rules;
-}
-
-
-// For installs on pre WP 3.6
-if( ! function_exists( 'wp_is_writable' ) ) {
-
-	/**
-	 * Determine if a directory is writable.
-	 *
-	 * This function is used to work around certain ACL issues
-	 * in PHP primarily affecting Windows Servers.
-	 *
-	 * @see win_is_writable()
-	 *
-	 * @since 3.6.0
-	 *
-	 * @param string $path
-	 * @return bool
-	 */
-	function wp_is_writable( $path ) {
-	        if ( 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) )
-	                return win_is_writable( $path );
-	        else
-	                return @is_writable( $path );
-	}
 }

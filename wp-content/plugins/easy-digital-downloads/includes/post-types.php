@@ -4,7 +4,7 @@
  *
  * @package     EDD
  * @subpackage  Functions
- * @copyright   Copyright (c) 2014, Pippin Williamson
+ * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -56,7 +56,7 @@ function edd_setup_edd_post_types() {
 		'map_meta_cap'      => true,
 		'has_archive' 		=> $archives,
 		'hierarchical' 		=> false,
-		'supports' 			=> apply_filters( 'edd_download_supports', array( 'title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'author' ) ),
+		'supports' 			=> apply_filters( 'edd_download_supports', array( 'title', 'editor', 'thumbnail', 'excerpt' ) ),
 	);
 	register_post_type( 'download', apply_filters( 'edd_download_post_type_args', $download_args ) );
 
@@ -121,7 +121,7 @@ function edd_setup_edd_post_types() {
 	);
 	register_post_type( 'edd_discount', $discount_args );
 }
-add_action( 'init', 'edd_setup_edd_post_types', 1 );
+add_action( 'init', 'edd_setup_edd_post_types', 100 );
 
 /**
  * Get Default Labels
@@ -141,8 +141,6 @@ function edd_get_default_labels() {
  * Get Singular Label
  *
  * @since 1.0.8.3
- *
- * @param bool $lowercase
  * @return string $defaults['singular'] Singular label
  */
 function edd_get_label_singular( $lowercase = false ) {
@@ -169,13 +167,6 @@ function edd_get_label_plural( $lowercase = false ) {
  * @return string $title New placeholder text
  */
 function edd_change_default_title( $title ) {
-     // If a frontend plugin uses this filter (check extensions before changing this function)
-     if ( !is_admin() ) {
-     	$label = edd_get_label_singular();
-        $title = sprintf( __( 'Enter %s title here', 'edd' ), $label );
-     	return $title;
-     }
-     
      $screen = get_current_screen();
 
      if  ( 'download' == $screen->post_type ) {
@@ -199,7 +190,7 @@ function edd_setup_download_taxonomies() {
 
 	/** Categories */
 	$category_labels = array(
-		'name' 				=> sprintf( _x( '%s Categories', 'taxonomy general name', 'edd' ), edd_get_label_singular() ),
+		'name' 				=> _x( 'Download Categories', 'taxonomy general name', 'edd' ),
 		'singular_name' 	=> _x( 'Category', 'taxonomy singular name', 'edd' ),
 		'search_items' 		=> __( 'Search Categories', 'edd'  ),
 		'all_items' 		=> __( 'All Categories', 'edd'  ),
@@ -210,7 +201,6 @@ function edd_setup_download_taxonomies() {
 		'add_new_item' 		=> __( 'Add New Category', 'edd'  ),
 		'new_item_name' 	=> __( 'New Category Name', 'edd'  ),
 		'menu_name' 		=> __( 'Categories', 'edd'  ),
-		'choose_from_most_used' => sprintf( __( 'Choose from most used %s categories', 'edd'  ), edd_get_label_singular() ),
 	);
 
 	$category_args = apply_filters( 'edd_download_category_args', array(
@@ -223,11 +213,10 @@ function edd_setup_download_taxonomies() {
 		)
 	);
 	register_taxonomy( 'download_category', array('download'), $category_args );
-	register_taxonomy_for_object_type( 'download_category', 'download' );
 
 	/** Tags */
 	$tag_labels = array(
-		'name' 				=> sprintf( _x( '%s Tags', 'taxonomy general name', 'edd' ), edd_get_label_singular() ),
+		'name' 				=> _x( 'Download Tags', 'taxonomy general name', 'edd' ),
 		'singular_name' 	=> _x( 'Tag', 'taxonomy singular name', 'edd' ),
 		'search_items' 		=> __( 'Search Tags', 'edd'  ),
 		'all_items' 		=> __( 'All Tags', 'edd'  ),
@@ -238,7 +227,6 @@ function edd_setup_download_taxonomies() {
 		'add_new_item' 		=> __( 'Add New Tag', 'edd'  ),
 		'new_item_name' 	=> __( 'New Tag Name', 'edd'  ),
 		'menu_name' 		=> __( 'Tags', 'edd'  ),
-		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'edd'  ), edd_get_label_singular() ),
 	);
 
 	$tag_args = apply_filters( 'edd_download_tag_args', array(
@@ -252,9 +240,8 @@ function edd_setup_download_taxonomies() {
 		)
 	);
 	register_taxonomy( 'download_tag', array( 'download' ), $tag_args );
-	register_taxonomy_for_object_type( 'download_tag', 'download' );
 }
-add_action( 'init', 'edd_setup_download_taxonomies', 0 );
+add_action( 'init', 'edd_setup_download_taxonomies', 10 );
 
 /**
  * Registers Custom Post Statuses which are used by the Payments and Discount
@@ -288,14 +275,6 @@ function edd_register_post_type_statuses() {
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
 		'label_count'               => _n_noop( 'Revoked <span class="count">(%s)</span>', 'Revoked <span class="count">(%s)</span>', 'edd' )
-	)  );
-	register_post_status( 'abandoned', array(
-		'label'                     => _x( 'Abandoned', 'Abandoned payment status', 'edd' ),
-		'public'                    => true,
-		'exclude_from_search'       => false,
-		'show_in_admin_all_list'    => true,
-		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Abandoned <span class="count">(%s)</span>', 'Abandoned <span class="count">(%s)</span>', 'edd' )
 	)  );
 
 	// Discount Code Statuses

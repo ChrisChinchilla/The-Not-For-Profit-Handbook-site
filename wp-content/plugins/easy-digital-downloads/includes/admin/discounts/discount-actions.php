@@ -4,7 +4,7 @@
  *
  * @package     EDD
  * @subpackage  Admin/Discounts
- * @copyright   Copyright (c) 2014, Pippin Williamson
+ * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.8.1
  */
@@ -21,12 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return void
  */
 function edd_add_discount( $data ) {
-	if ( isset( $data['edd-discount-nonce'] ) && wp_verify_nonce( $data['edd-discount-nonce'], 'edd_discount_nonce' ) ) {
+	if ( wp_verify_nonce( $data['edd-discount-nonce'], 'edd_discount_nonce' ) ) {
 		// Setup the discount code details
 		$posted = array();
 
 		foreach ( $data as $key => $value ) {
-			if ( $key != 'edd-discount-nonce' && $key != 'edd-action' && $key != 'edd-redirect' ) {
+			if ( $key != 'edd-discount-nonce' && $key != 'edd-action' ) {
 				if ( is_string( $value ) || is_int( $value ) )
 					$posted[ $key ] = strip_tags( addslashes( $value ) );
 				elseif ( is_array( $value ) )
@@ -36,11 +36,7 @@ function edd_add_discount( $data ) {
 
 		// Set the discount code's default status to active
 		$posted['status'] = 'active';
-		if ( edd_store_discount( $posted ) ) {
-			wp_redirect( add_query_arg( 'edd-message', 'discount_added', $data['edd-redirect'] ) ); edd_die();
-		} else {
-			wp_redirect( add_query_arg( 'edd-message', 'discount_add_failed', $data['edd-redirect'] ) ); edd_die();
-		}		
+		$save = edd_store_discount( $posted );
 	}
 }
 add_action( 'edd_add_discount', 'edd_add_discount' );
@@ -66,13 +62,13 @@ function edd_edit_discount( $data ) {
 			}
 		}
 
-		$old_discount = edd_get_discount_by( 'code', $data['code'] );
+		$old_discount = edd_get_discount_by_code( $data['code'] );
 		$discount['uses'] = edd_get_discount_uses( $old_discount->ID );
 
 		if ( edd_store_discount( $discount, $data['discount-id'] ) ) {
-			wp_redirect( add_query_arg( 'edd-message', 'discount_updated', $data['edd-redirect'] ) ); edd_die();
+			wp_redirect( add_query_arg( 'edd-message', 'discount_updated', $data['edd-redirect'] ) ); exit;
 		} else {
-			wp_redirect( add_query_arg( 'edd-message', 'discount_update_failed', $data['edd-redirect'] ) ); edd_die();
+			wp_redirect( add_query_arg( 'edd-message', 'discount_update_failed', $data['edd-redirect'] ) ); exit;
 		}
 	}
 }
@@ -107,7 +103,7 @@ add_action( 'edd_delete_discount', 'edd_delete_discount' );
  * @return void
  */
 function edd_activate_discount( $data ) {
-	$id = absint( $data['discount'] );
+	$id = $data['discount'];
 	edd_update_discount_status( $id, 'active' );
 }
 add_action( 'edd_activate_discount', 'edd_activate_discount' );
@@ -115,7 +111,7 @@ add_action( 'edd_activate_discount', 'edd_activate_discount' );
 /**
  * Deactivate Discount
  *
- * Sets a discount code's status to deactivate
+ * Sets a discount code's status to deactive
  *
  * @since 1.0
  * @param array $data Discount code data
@@ -123,7 +119,7 @@ add_action( 'edd_activate_discount', 'edd_activate_discount' );
  * @return void
 */
 function edd_deactivate_discount( $data) {
-	$id = absint( $data['discount'] );
+	$id = $data['discount'];
 	edd_update_discount_status( $id, 'inactive' );
 }
 add_action( 'edd_deactivate_discount', 'edd_deactivate_discount' );

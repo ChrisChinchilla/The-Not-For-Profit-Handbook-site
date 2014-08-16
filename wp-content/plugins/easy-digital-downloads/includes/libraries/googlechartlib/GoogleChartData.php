@@ -34,7 +34,7 @@ class GoogleChartData
 	protected $labels = null;
 
 	/**
-	 * Indicate if the color has been overridden.
+	 * Indicate if the color has been overriden.
 	 * This variable is used to minimize the request. If no custom color has
 	 * been providen, then the @c cho parameter is not triggered.
 	 */
@@ -73,7 +73,7 @@ class GoogleChartData
 	protected $fill_slices = array();
 
 	/**
-	 *  bool Whether to calculate scale automatically or not.
+	 *  bool Wether to calculate scale automatically or not.
 	 */
 	protected $autoscale = true;
 	/**
