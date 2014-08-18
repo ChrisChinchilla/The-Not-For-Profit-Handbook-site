@@ -18,9 +18,12 @@ get_header(); ?>
 
 <?php get_template_part('template-parts/features-listing'); ?>
 
-<?php get_template_part('template-parts/reviews-listing'); ?>
+<!--
+RESTORE LATER
 
-<?php get_template_part('template-parts/contributors-listing'); ?>
+<?php //get_template_part('template-parts/reviews-listing'); ?>
+
+<?php //get_template_part('template-parts/contributors-listing'); ?>
 
 
 <section class="call_to_action_block">
@@ -28,6 +31,7 @@ get_header(); ?>
 		<?php get_template_part('template-parts/main-call-to-action'); ?>
 	</div>
 </section>
+-->
 
 
 <?php
