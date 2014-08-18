@@ -11,18 +11,18 @@
  * (those wrapped in a function_exists() call) by defining them first in your child theme's
  * functions.php file. The child theme's functions.php file is included before the parent
  * theme's file, so the child theme functions would be used.
- * 
+ *
  * @package WordPress
  * @subpackage Cake
  * @since Cake 1.0
  */
- 
- 
- 
+
+
+
 
 /*
  * =======================================================================================================================================
- * REQUIRE (NHP) PTIONS FRAMEWORK 
+ * REQUIRE (NHP) PTIONS FRAMEWORK
  * =======================================================================================================================================
  */
 get_template_part('nhp', 'options');
@@ -98,7 +98,7 @@ if ( !function_exists('cake_avatar') ) {
  * with this function we add post formats and define which (of the 9 available) we'll be taking advantage of
  * the "standard" post format is the default if none is selected
  */
-if ( function_exists( 'add_theme_support' ) ) { 
+if ( function_exists( 'add_theme_support' ) ) {
 	add_theme_support( 'post-formats', array( 'aside', 'quote', 'gallery' ) );
 }
 
@@ -112,21 +112,21 @@ if ( function_exists( 'add_theme_support' ) ) {
  * This functions adds Featured Image function to our theme. Defines the sizes
  */
 
-if ( function_exists( 'add_theme_support' ) ) { 
-	
+if ( function_exists( 'add_theme_support' ) ) {
+
 	add_theme_support( 'post-thumbnails' );
-	
+
 	// regular thumbnails
 	add_image_size( 'cake_regular', 400, 400, true );
 
 	// medium thumbnails
 	add_image_size( 'cake_medium', 650, 650, true );
-	
+
 	// large size thumbnails
 	add_image_size( 'cake_large', 960, '' );
-	
-	
-		
+
+
+
 	/*
 	 * =======================================================================================================================================
 	 * ATTACHMENT DISPLAY SETTINGS
@@ -140,7 +140,7 @@ if ( function_exists( 'add_theme_support' ) ) {
 	    return $sizes;
 	}
 	add_filter('image_size_names_choose', 'cake_show_image_sizes');
-	
+
 }
 
 
@@ -154,7 +154,7 @@ if ( function_exists( 'add_theme_support' ) ) {
  * =======================================================================================================================================
  * This function adds RSS feed links to <head> for posts and comments.
 */
-if ( function_exists( 'add_theme_support' ) ) { 
+if ( function_exists( 'add_theme_support' ) ) {
 	add_theme_support( 'automatic-feed-links' );
 }
 
@@ -170,7 +170,7 @@ if ( function_exists( 'add_theme_support' ) ) {
 add_action('after_setup_theme', 'cake_setup');
 function cake_setup(){
     load_theme_textdomain('cake', get_template_directory() . '/languages');
-	
+
 	$locale = get_locale();
 	$locale_file = get_template_directory() . "/languages/$locale.php";
 	if ( is_readable( $locale_file ) )
@@ -252,7 +252,7 @@ if(function_exists('register_sidebar')){
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
 	));
-} 
+}
 
 
 
@@ -295,7 +295,7 @@ function cake_index_nav( $nav_id ) {
 			<ul>
 				<li class="nextPost"><?php previous_posts_link( __( '&larr; newer ', 'cake' ) ); ?></li>
 				<li class="prevPost"><?php next_posts_link( __( 'older &rarr;', 'cake' ) ); ?></li>
-			</ul>					
+			</ul>
 		</nav>
 	<?php endif;
 }
@@ -324,7 +324,7 @@ function cake_single_nav( $nav_id ) {
 			<ul>
 				<li class="next_post"><?php next_post_link( __( '&larr; %link ', 'cake' ) ); ?></li>
 				<li class="prev_post"><?php previous_post_link( __( '%link &rarr;', 'cake' ) ); ?></li>
-			</ul>					
+			</ul>
 		</nav>
 	<?php endif;
 }
@@ -366,10 +366,10 @@ function cake_scripts_and_styles() {
 	wp_register_script('modernizr',
 		get_template_directory_uri() . '/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js', false, '2.6.2', false);
 	wp_enqueue_script('modernizr');
-	
+
 	// enqueue WP core jQuery
 	wp_enqueue_script('jquery');
-	
+
 	// register and enqueue jQuery UI script
 	// it depends on jQuery and is loaded in the footer
 	wp_register_script('jquery-ui',
@@ -385,14 +385,14 @@ function cake_scripts_and_styles() {
 	// wp_enqueue_script('jquery-ui-draggable', array('jquery','jquery-ui-core') );
 	// wp_enqueue_script('jquery-effects-core', array('jquery','jquery-ui-core') );
 	// ----------------------------------------------------------------------------
-	
-	// register and enqueue the plugins.js file 
+
+	// register and enqueue the plugins.js file
 	// it depends on jQuery and is loaded in the footer
 	wp_register_script('plugins',
 		get_template_directory_uri() . '/js/plugins.js', '1.0', true, array('jquery','jquery-ui') );
 	wp_enqueue_script('plugins');
-	
-	
+
+
 	// register and enqueue main.js site-wide javascript behaviors file
 	// it depends on jQuery and is loaded in the footer
 	wp_register_script('main',
@@ -404,87 +404,87 @@ function cake_scripts_and_styles() {
 	// sites with threaded comments (when in use).
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) )
 		wp_enqueue_script( 'comment-reply' );
-		
+
 
 	// =========================
 	// Register & enqueue styles
 	// =========================
-	
-	
-	
-	wp_register_style( 'normalize', 
+
+
+
+	wp_register_style( 'normalize',
 		get_template_directory_uri() . '/css/normalize.min.css', array(), '1.1.0', 'all' );
 	wp_enqueue_style( 'normalize' );
-	
-	wp_register_style( 'boilerplate', 
+
+	wp_register_style( 'boilerplate',
 		get_template_directory_uri() . '/css/html5-boilerplate.css', array(), '1.0', 'all' );
 	wp_enqueue_style( 'boilerplate' );
-	
-	wp_register_style( 'jquery-ui', 
+
+	wp_register_style( 'jquery-ui',
 		get_template_directory_uri() . '/css/jquery-ui-1.10.2.custom.min.css', array(), '1.10.2', 'all' );
 	wp_enqueue_style( 'jquery-ui' );
-	
-	wp_register_style( 'nanoscroller', 
+
+	wp_register_style( 'nanoscroller',
 		get_template_directory_uri() . '/css/nanoscroller.css', array() , '' );
 	wp_enqueue_style( 'nanoscroller' );
 
-	wp_register_style( 'flexslider', 
+	wp_register_style( 'flexslider',
 		get_template_directory_uri() . '/css/flexslider.css', array() , '' );
 	wp_enqueue_style( 'flexslider' );
 
-	wp_register_style( 'superfish', 
+	wp_register_style( 'superfish',
 		get_template_directory_uri() . '/css/superfish.css', array() , '' );
 	wp_enqueue_style( 'superfish' );
 
-	wp_register_style( 'colorbox', 
+	wp_register_style( 'colorbox',
 		get_template_directory_uri() . '/css/colorbox.css', array() , '' );
 	wp_enqueue_style( 'colorbox' );
-	
-	
+
+
 	// Enque our main style.css
 	wp_enqueue_style( 'main', get_stylesheet_uri() );
-	
 
-	wp_register_style( 'media-queries', 
+
+	wp_register_style( 'media-queries',
 		get_template_directory_uri() . '/css/media-queries.css', array('main') , '' );
 	wp_enqueue_style( 'media-queries' );
-	
-	
-	
+
+
+
 	// FONTAWESOME
-	wp_register_style( 'font-awesome', 
+	wp_register_style( 'font-awesome',
 		get_template_directory_uri() . '/css/font-awesome/font-awesome.min.css', array() , '' );
 	wp_enqueue_style( 'font-awesome' );
 
-	wp_register_style( 'font-awesome-corp', 
+	wp_register_style( 'font-awesome-corp',
 		get_template_directory_uri() . '/css/font-awesome/font-awesome-corp.css', array('font-awesome') , '' );
 	wp_enqueue_style( 'font-awesome-corp' );
 
-	wp_register_style( 'font-awesome-ext', 
+	wp_register_style( 'font-awesome-ext',
 		get_template_directory_uri() . '/css/font-awesome/font-awesome-ext.css', array('font-awesome') , '' );
 	wp_enqueue_style( 'font-awesome-ext' );
 
-	wp_register_style( 'font-awesome-social', 
+	wp_register_style( 'font-awesome-social',
 		get_template_directory_uri() . '/css/font-awesome/font-awesome-social.css', array('font-awesome') , '' );
 	wp_enqueue_style( 'font-awesome-social' );
-	
+
 
 	// conditional stylesheets
 	function conditional_stylesheets() {
 	    global $wp_styles;
-	
+
 	    wp_enqueue_style( 'ie-css', get_template_directory_uri() . '/css/cake-ie.css', array() , '' );
 	    $wp_styles->add_data( 'ie-css', 'conditional', 'IE 9' );
-	    
+
 	    wp_enqueue_style( 'font-awesome-ie7', get_template_directory_uri() . '/css/font-awesome/font-awesome-ie7.min.css', array() , '1.0' );
 	    $wp_styles->add_data( 'font-awesome-ie7', 'conditional', 'IE 7' );
-	    
+
 	    wp_enqueue_style( 'font-awesome-more-ie7', get_template_directory_uri() . '/css/font-awesome/font-awesome-more-ie7.min', array() , '1.0' );
 	    $wp_styles->add_data( 'font-awesome-more-ie7', 'conditional', 'IE 7' );
 	}
-	add_action( 'wp_print_styles', 'conditional_stylesheets' );    
-    
-} 
+	add_action( 'wp_print_styles', 'conditional_stylesheets' );
+
+}
 add_action('wp_enqueue_scripts', 'cake_scripts_and_styles');
 
 
@@ -512,16 +512,16 @@ function cake_alternate_style() {
 	wp_register_style( 'black-and-white', get_template_directory_uri() . '/css/black-and-white.css' );
 
 	// enqueue our alternate stylesheets as needed
-	if ( $NHP_Options->get('alternate_style') == 'light_blue' ) { 
+	if ( $NHP_Options->get('alternate_style') == 'light_blue' ) {
 		wp_enqueue_style( 'light-blue' );
 	}
-	else if  ( $NHP_Options->get('alternate_style') == 'light_green' ) { 
+	else if  ( $NHP_Options->get('alternate_style') == 'light_green' ) {
 		wp_enqueue_style( 'light-green' );
 	}
-	else if  ( $NHP_Options->get('alternate_style') == 'black_white' ) { 
+	else if  ( $NHP_Options->get('alternate_style') == 'black_white' ) {
 		wp_enqueue_style( 'black-and-white' );
 	}
-} 
+}
 add_action('init', 'cake_alternate_style');
 
 
@@ -535,19 +535,19 @@ add_action('init', 'cake_alternate_style');
  * =======================================================================================================================================
  * ADD 'odd' OR 'even' CSS CLASSES TO post_class()
  * =======================================================================================================================================
- * 
+ *
  */
 add_filter ( 'post_class' , 'cake_odd_or_even' );
 if( !function_exists( 'cake_odd_or_even' ) ) {
 	global $current_class;
 	$current_class = 'odd';
-	
-	function cake_odd_or_even ( $classes ) { 
+
+	function cake_odd_or_even ( $classes ) {
 		global $current_class;
 		$classes[] = $current_class;
-		
+
 		$current_class = ($current_class == 'odd') ? 'even' : 'odd';
-		
+
 		return $classes;
 	}
 }
@@ -595,7 +595,7 @@ add_filter( 'wp_title', 'cake_title', 10, 2 );
  * =======================================================================================================================================
  * INCLUDE CUSTOM POST TYPES
  * =======================================================================================================================================
- * we include specific custom post types as need here, 
+ * we include specific custom post types as need here,
  */
  // display custom taxonomy admin fields
 include("functions/cake-custom/cake_admin-columns.php");
@@ -618,7 +618,7 @@ include("functions/cake-custom/cake_comments.php");
  * =======================================================================================================================================
  * INCLUDE CUSTOM META FIELDS
  * =======================================================================================================================================
- * if you won't be using a particular custom meta box, 
+ * if you won't be using a particular custom meta box,
  * you can comment it out or delete the actual file
  */
 $prefix = '_cake_'; // Prefix for all fields
@@ -665,7 +665,7 @@ function cake_initialize_cmb_meta_boxes() {
 
 /*
  * =======================================================================================================================================
- * POPULAR (MOST VIEWED) POST FUNCTION 
+ * POPULAR (MOST VIEWED) POST FUNCTION
  * =======================================================================================================================================
  * function to get, set & display most viewed posts
  */
@@ -701,22 +701,22 @@ function setPostViews($postID) {
 
 /*
  * =======================================================================================================================================
- * RECENT COMMENTS FUNCTION 
+ * RECENT COMMENTS FUNCTION
  * =======================================================================================================================================
  * function for display most recent comments
  */
-function cake_recent_comments($no_comments = 10, $comment_len = 50) { 
-    global $wpdb; 
-	
+function cake_recent_comments($no_comments = 10, $comment_len = 50) {
+    global $wpdb;
+
 	$sql = "SELECT * FROM $wpdb->comments";
 	$sql .= " JOIN $wpdb->posts ON ID = comment_post_ID";
-	$sql .= " WHERE comment_approved = '1' AND post_status = 'publish' AND post_password =''AND comment_type = '' "; 
-	$sql .= " ORDER BY comment_date DESC LIMIT $no_comments"; 
-	
-		
+	$sql .= " WHERE comment_approved = '1' AND post_status = 'publish' AND post_password =''AND comment_type = '' ";
+	$sql .= " ORDER BY comment_date DESC LIMIT $no_comments";
+
+
 	$comments = $wpdb->get_results($sql);
-		
-	if ($comments) { 
+
+	if ($comments) {
 		echo '<nav class="toc_nav"> <ul class="secondary_nav recent_comments">';
 		foreach ($comments as $comment) { ?>
 			<li class="clearfix">
@@ -729,16 +729,16 @@ function cake_recent_comments($no_comments = 10, $comment_len = 50) {
 					<span class="toc_el_title">
 						<?php echo strip_tags(substr(apply_filters('get_comment_text', $comment->comment_content), 0, $comment_len)) . "&hellip;"; ?>
 					</span>
-					
+
 					<small class="toc_meta clearfix">
 						<span class="divider"></span>
 						<i class="icon-user"></i> <strong><?php echo strip_tags($comment->comment_author); ?></strong>
 					</small>
-					
+
 				</a>
 			</li>
 
-			<?php } 
+			<?php }
 		echo '</ul> </nav>';
 	}
 }
@@ -809,12 +809,12 @@ function cake_modify_author_fields( $contactmethods ) {
 
 	// Remove often unused user contact methods
 	// uncomment the below contact methods if not needed
-	
+
 	// unset($contactmethods['aim']);
 	// unset($contactmethods['jabber']);
 	// unset($contactmethods['yim']);
 
-	 
+
 	return $contactmethods;
 }
 add_filter('user_contactmethods','cake_modify_author_fields',10,1);
@@ -827,28 +827,28 @@ add_filter('user_contactmethods','cake_modify_author_fields',10,1);
 
 /*
  * =======================================================================================================================================
- * LIST OF CONTRIBUTORS (USERS) 
+ * LIST OF CONTRIBUTORS (USERS)
  * =======================================================================================================================================
  * with this function we display more author(s) info on the contributors page
  */
 function cake_contributors() {
 	global $wpdb;
-	
+
 	//$authors = get_users('role=author&exclude=7,8,9');
 	$authors = get_users('role=administrator');
-	
+
 
 	foreach ($authors as $author ) { ?>
 
 		<div class="contributor clearfix">
 			<div class="section_content clearfix">
-		
+
 				<span class="contributor_image">
 					<?php echo get_avatar($author->ID, 250); ?>
 				</span>
-				
-		
-		
+
+
+
 				<div class="contributor_info clearfix">
 					<h2>
 						<?php echo esc_attr( $author->display_name ); ?>
@@ -859,62 +859,62 @@ function cake_contributors() {
 								<?php echo esc_url( $author->user_url ); ?>
 							</a>
 						<?php endif; ?>
-					
+
 					</p>
-					
+
 					<div class="contributor_social">
 						<?php if ( $author->twitter ) :  ?>
 							<a href="<?php echo esc_url( $author->twitter ); ?>" title="<?php _e('Twitter','cake'); ?>">
 								<i class="icon-twitter"></i>
 							</a>
 						<?php endif; ?>
-						
+
 						<?php if ( $author->facebook ) :  ?>
 							<a href="<?php echo esc_url( $author->facebook ); ?>" title="<?php _e('Facebook','cake'); ?>">
 								<i class="icon-facebook"></i>
 							</a>
 						<?php endif; ?>
-						
+
 						<?php if ( $author->instagram ) :  ?>
 							<a href="<?php echo esc_url( $author->instagram ); ?>" title="<?php _e('Instagram','cake'); ?>">
 								<i class="icon-instagram"></i>
 							</a>
 						<?php endif; ?>
-				
+
 						<?php if ( $author->pinterest ) :  ?>
 							<a href="<?php echo esc_url( $author->pinterest ); ?>" title="<?php _e('Pinterest','cake'); ?>">
 								<i class="icon-pinterest"></i>
 							</a>
 						<?php endif; ?>
-				
+
 						<?php if ( $author->linkedin ) :  ?>
 							<a href="<?php echo esc_url( $author->linkedin ); ?>" title="<?php _e('LinkedIn','cake'); ?>">
 								<i class="icon-linkedin"></i>
 							</a>
 						<?php endif; ?>
-				
+
 						<?php if ( $author->flickr ) :  ?>
 							<a href="<?php echo esc_url( $author->flickr ); ?>" title="<?php _e('Flickr','cake'); ?>">
 								<i class="icon-flickr"></i>
 							</a>
 						<?php endif; ?>
 					</div>
-					
+
 					<span class="divider"></span>
 					<br class="clearfloat" />
-					
+
 					<div class="contributor_description clearfix">
 						<?php echo $author->user_description; ?>
 					</div>
-	
+
 				</div>
-		
-		
+
+
 			</div>
 		</div>
 
 	<?php }
-	
+
 }
 
 

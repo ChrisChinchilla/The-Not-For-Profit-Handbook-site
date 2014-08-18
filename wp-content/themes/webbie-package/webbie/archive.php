@@ -17,13 +17,13 @@ get_header(); ?>
 
 
 	<section class="main_content index_listing">
-	
-	
+
+
 		<div class="intro_section">
 			<div class="meta_content">
-	
+
 				<header class="pic_and_title">
-				
+
 					<h2>
 						<?php
 							if ( is_day() ) :
@@ -38,39 +38,38 @@ get_header(); ?>
 						?>
 						<span class="divider"></span>
 					</h2>
-					
+
 				</header>
-				
-				<div class="arrow_down"></div>				
-				
-			</div>		
-		</div>	
-			
-				
-			
-			
+
+				<div class="arrow_down"></div>
+
+			</div>
+		</div>
+
+
+
+
 		<div class="inner">
-	
+
 			<section class="left_content">
-	
+
 			<?php if ( have_posts() ) : ?>
-	
+
 				<?php while ( have_posts() ) : the_post(); ?>
 						<?php get_template_part( 'content', get_post_format() ); ?>
 				<?php endwhile; ?>
-	
+
 			<?php else : ?>
-			
+
 				<?php get_template_part( 'template-parts/nothing-found'); ?>
-			
+
 			<?php endif; ?>
 			</section>
-			
+
 		</div>
 	</section>
 
 </section>
 
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php get_sidebar(); ?>
 <?php get_footer(); ?>

@@ -19,30 +19,29 @@ get_header(); ?>
 
 
 	<section class="main_content">
-	
+
 		<div class="in ner">
-	
+
 			<?php if ( have_posts() ) : ?>
-	
+
 				<?php while ( have_posts() ) : the_post(); ?>
 					<section class="left_content">
 						<?php get_template_part( 'content', 'page' ); ?>
 						<?php get_template_part('template-parts/reviews-listing'); ?>
 					</section>
 				<?php endwhile; ?>
-	
+
 			<?php else : ?>
-			
+
 				<?php get_template_part( 'template-parts/nothing-found'); ?>>
-			
+
 			<?php endif; ?>
-			
+
 		</div>
 	</section>
 
 </section>
 
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php get_sidebar('ebook'); ?>
 <?php get_footer(); ?>
 

@@ -19,24 +19,24 @@ get_header(); ?>
 
 
 	<section class="main_content">
-	
+
 		<div class="inner">
-	
+
 			<?php if ( have_posts() ) : ?>
-	
+
 				<?php while ( have_posts() ) : the_post(); ?>
 					<section class="left_content">
 						<?php get_template_part( 'content', 'page' ); ?>
 						<?php get_template_part('template-parts/contributors-listing'); ?>
 					</section>
 				<?php endwhile; ?>
-	
+
 			<?php else : ?>
-			
+
 				<?php get_template_part( 'template-parts/nothing-found'); ?>>
-			
+
 			<?php endif; ?>
-			
+
 		</div>
 	</section>
 
@@ -44,6 +44,5 @@ get_header(); ?>
 
 
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php get_sidebar('ebook'); ?>
 <?php get_footer(); ?>
 

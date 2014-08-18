@@ -30,7 +30,7 @@ get_header(); ?>
 </section>
 
 
-<?php 
+<?php
 // we don't need these on the front-page or
 // when on a template page with no sidebar
 // but to prevent the js error, we include them
@@ -41,9 +41,6 @@ get_header(); ?>
 
 
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php 
-// it's not necessary to have the sidebar on this page (template)
-// nonetheless, we make it available at smaller screens just in case
-get_sidebar('ebook'); ?>
+
 <?php get_footer(); ?>
 

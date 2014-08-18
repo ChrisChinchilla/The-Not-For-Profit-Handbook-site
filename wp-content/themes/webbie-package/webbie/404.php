@@ -20,14 +20,14 @@ get_header(); ?>
 					<?php _e('Oh no! <span class="search_term">Page not found.</span>', 'cake'); ?>
 					<span class="divider"></span>
 				</h2>
-				
+
 			</header>
-			
-			<div class="arrow_down"></div>				
-			
-		</div>		
-	</div>	
-		
+
+			<div class="arrow_down"></div>
+
+		</div>
+	</div>
+
 
 
 	<div class="inner">
@@ -52,5 +52,4 @@ get_header(); ?>
 </section>
 
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php get_sidebar(); ?>
 <?php get_footer(); ?>

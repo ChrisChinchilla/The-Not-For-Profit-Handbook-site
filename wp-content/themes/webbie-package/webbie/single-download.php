@@ -18,20 +18,17 @@ get_header(); ?>
 				<?php get_template_part( 'content', 'download' ); ?>
 				</section>
 			<?php endwhile; ?>
-	
+
 		<?php else : ?>
-		
+
 			<?php get_template_part( 'template-parts/nothing-found'); ?>
-		
-		<?php endif; // end have_posts() check ?>	
-	
+
+		<?php endif; // end have_posts() check ?>
+
 	</section>
-	
+
 </section>
-				
+
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php 
-// it's not necessary to have the sidebar on this page (template)
-// nonetheless, we make it available at smaller screens just in case
-get_sidebar('ebook'); ?>
-<?php get_footer(); ?>	
+
+<?php get_footer(); ?>

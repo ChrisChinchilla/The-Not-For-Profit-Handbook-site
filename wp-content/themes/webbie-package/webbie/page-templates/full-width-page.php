@@ -19,29 +19,29 @@ get_header(); ?>
 <section class="body_content clearfix">
 
 	<section class="main_content">
-	
+
 		<div class="inner">
-	
+
 			<?php if ( have_posts() ) : ?>
-	
+
 				<?php while ( have_posts() ) : the_post(); ?>
 					<section class="left_content">
 						<?php get_template_part( 'content', 'page' ); ?>
 					</section>
 				<?php endwhile; ?>
-	
+
 			<?php else : ?>
-			
+
 				<?php get_template_part( 'template-parts/nothing-found'); ?>>
-			
+
 			<?php endif; ?>
-			
+
 		</div>
 	</section>
 
 </section>
 
-<?php 
+<?php
 // we don't need these on a full-width page or
 // when on a template page with no sidebar
 // but to prevent the js error, we include them
@@ -51,8 +51,7 @@ get_header(); ?>
 <i id="nav-close-btn hidden"></i>
 
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php 
+<?php
 // it's not necessary to have the sidebar on this page (template)
 // nonetheless, we make it available (through CSS) at smaller screens just in case
-get_sidebar('ebook'); ?>
 <?php get_footer(); ?>

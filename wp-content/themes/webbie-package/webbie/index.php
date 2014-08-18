@@ -22,21 +22,21 @@ get_header(); ?>
 
 	<section class="main_content index_listing">
 		<div class="inner">
-	
+
 			<section class="left_content">
 			<?php if ( have_posts() ) : ?>
-	
+
 				<?php while ( have_posts() ) : the_post(); ?>
 						<?php get_template_part( 'content', get_post_format() ); ?>
 				<?php endwhile; ?>
-	
+
 			<?php else : ?>
-			
+
 				<?php get_template_part( 'template-parts/nothing-found'); ?>
-			
+
 			<?php endif; ?>
 			</section>
-			
+
 		</div>
 	</section>
 
@@ -44,5 +44,4 @@ get_header(); ?>
 </section>
 
 <?php get_template_part( 'template-parts/bottom-toolbar'); ?>
-<?php get_sidebar(); ?>
 <?php get_footer(); ?>

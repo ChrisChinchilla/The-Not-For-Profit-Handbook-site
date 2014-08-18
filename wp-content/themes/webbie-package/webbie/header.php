@@ -89,16 +89,6 @@ get_template_part( 'template-parts/cake_contact-setup');
 
 	<div class="nav_divider logo_divider"><div class="darker"></div><div class="lighter"></div></div>
 
-
-	<a href="#" class="show_hide hide_sidebar" title="<?php _e('hide sidebar','cake'); ?>">
-		<i class="icon-indent-left"></i>
-	</a>
-
-	<a href="#" class="show_hide show_sidebar hidden" title="<?php _e('show sidebar','cake'); ?>">
-		<i class="icon-indent-right"></i>
-	</a>
-
-
 	<nav class="main_nav">
 		<span class="split_darker nav_wrap"></span>
 		<?php
