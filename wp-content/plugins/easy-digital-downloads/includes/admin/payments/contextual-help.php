@@ -4,7 +4,7 @@
  *
  * @package     EDD
  * @subpackage  Admin/Payments
- * @copyright   Copyright (c) 2013, Pippin Williamson
+ * @copyright   Copyright (c) 2014, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.4
  */
@@ -30,8 +30,8 @@ function edd_payments_contextual_help() {
 		'<p>' . sprintf( __( 'Visit the <a href="%s">documentation</a> on the Easy Digital Downloads website.', 'edd' ), esc_url( 'https://easydigitaldownloads.com/documentation/' ) ) ) . '</p>' .
 		'<p>' . sprintf(
 					__( '<a href="%s">Post an issue</a> on <a href="%s">GitHub</a>. View <a href="%s">extensions</a> or <a href="%s">themes</a>.', 'edd' ),
-					esc_url( 'https://github.com/pippinsplugins/Easy-Digital-Downloads/issues' ),
-					esc_url( 'https://github.com/pippinsplugins/Easy-Digital-Downloads' ),
+					esc_url( 'https://github.com/easydigitaldownloads/Easy-Digital-Downloads/issues' ),
+					esc_url( 'https://github.com/easydigitaldownloads/Easy-Digital-Downloads' ),
 					esc_url( 'https://easydigitaldownloads.com/extensions/' ),
 					esc_url( 'https://easydigitaldownloads.com/themes/' )
 				) . '</p>'
@@ -47,8 +47,23 @@ function edd_payments_contextual_help() {
 	) );
 
 	$screen->add_help_tab( array(
+		'id'	    => 'edd-payments-search',
+		'title'	    => __( 'Search Payments', 'edd' ),
+		'content'	=>
+			'<p>' . __( 'The payment history can be searched in several different ways:', 'edd' ) . '</p>' .
+			'<ul>
+				<li>' . __( 'You can enter the customer\'s email address', 'edd' ) . '</li>
+				<li>' . __( 'You can enter the customer\'s name or ID prefexed by \'user:\'', 'edd' ) . '</li>
+				<li>' . __( 'You can enter the 32-character purchase key', 'edd' ) . '</li>
+				<li>' . __( 'You can enter the purchase ID', 'edd' ) . '</li>
+				<li>' . __( 'You can enter a transaction ID prefixed by \'txn:\'', 'edd' ) . '</li>
+				<li>' . sprintf( __( 'You can enter the %s ID prefixed by \'#\'', 'edd' ), edd_get_label_singular() ) . '</li>
+			</ul>'
+	) );
+
+	$screen->add_help_tab( array(
 		'id'	    => 'edd-payments-details',
-		'title'	    => __( 'Order Details', 'edd' ),
+		'title'	    => __( 'Payment Details', 'edd' ),
 		'content'	=>
 			'<p>' . __( 'Each payment can be further inspected by clicking the corresponding <em>View Order Details</em> link. This will provide more information including:', 'edd' ) . '</p>' . 
 

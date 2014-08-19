@@ -4,7 +4,7 @@
  *
  * @package     EDD
  * @subpackage  Functions
- * @copyright   Copyright (c) 2013, Pippin Williamson
+ * @copyright   Copyright (c) 2014, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -16,14 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Allowed Mime Types
  *
  * @since 1.0
- * @param array $$existing_mimes A list of all the existing MIME types
- * @return array $$existing_mimes A list of all the new MIME types appended
+ *
+ * @param array $existing_mimes A list of all the existing MIME types
+ * @return array A list of all the new MIME types appended
  */
-function edd_allowed_mime_types( $existing_mimes ) {
+function edd_allowed_mime_types( $existing_mimes = array() ) {
 	$existing_mimes['zip']  = 'application/zip';
 	$existing_mimes['epub'] = 'application/epub+zip';
 	$existing_mimes['mobi'] = 'application/x-mobipocket-ebook';
 	$existing_mimes['m4r']  = 'audio/aac';
+	$existing_mimes['aif']  = 'audio/x-aiff';
+	$existing_mimes['aiff'] = 'audio/aiff';
 	$existing_mimes['psd']  = 'image/photoshop';
 	$existing_mimes['exe']  = 'application/octet-stream';
 	$existing_mimes['apk']  = 'application/vnd.android.package-archive';

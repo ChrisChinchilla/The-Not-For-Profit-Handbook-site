@@ -4,7 +4,7 @@
  *
  * @package     EDD
  * @subpackage  Admin/Reports
- * @copyright   Copyright (c) 2013, Pippin Williamson
+ * @copyright   Copyright (c) 2014, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
@@ -35,10 +35,8 @@ class EDD_Sales_Log_Table extends WP_List_Table {
 	/**
 	 * Get things started
 	 *
-	 * @access public
 	 * @since 1.4
 	 * @see WP_List_Table::__construct()
-	 * @return void
 	 */
 	public function __construct() {
 		global $status, $page;
@@ -77,6 +75,9 @@ class EDD_Sales_Log_Table extends WP_List_Table {
 			case 'amount' :
 				return edd_currency_filter( edd_format_amount( $item['amount'] ) );
 
+			case 'payment_id' :
+				return '<a href="' . admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id=' . $item[ 'payment_id' ] ) . '">' . edd_get_payment_number( $item[ 'payment_id' ] ) . '</a>';
+
 			default:
 				return $item[ $column_name ];
 		}
@@ -93,7 +94,7 @@ class EDD_Sales_Log_Table extends WP_List_Table {
 		$columns = array(
 			'ID'		=> __( 'Log ID', 'edd' ),
 			'user_id'  	=> __( 'User', 'edd' ),
-			'download'  => __( 'Download', 'edd' ),
+			'download'  => edd_get_label_singular(),
 			'amount'    => __( 'Item Amount', 'edd' ),
 			'payment_id'=> __( 'Payment ID', 'edd' ),
 			'date'  	=> __( 'Date', 'edd' )
@@ -270,11 +271,13 @@ class EDD_Sales_Log_Table extends WP_List_Table {
 	public function get_logs() {
 		global $edd_logs;
 
-		$logs_data = array();
+		// Prevent the queries from getting cached. Without this there are occasional memory issues for some installs
+		wp_suspend_cache_addition( true );
 
-		$paged    = $this->get_paged();
-		$download = empty( $_GET['s'] ) ? $this->get_filtered_download() : null;
-		$user     = $this-> get_filtered_user();
+		$logs_data = array();
+		$paged     = $this->get_paged();
+		$download  = empty( $_GET['s'] ) ? $this->get_filtered_download() : null;
+		$user      = $this-> get_filtered_user();
 
 		$log_query = array(
 			'post_parent' => $download,

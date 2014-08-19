@@ -41,14 +41,23 @@ $payment_data = edd_get_payment_meta( $payment_id  );
 				</tr>
 				<tr>
 					<th scope="row" valign="top">
+						<span><?php printf( __( 'Payment Amount in %s', 'edd' ), edd_get_currency() ); ?></span>
+					</th>
+					<td>
+						<input class="small-text" type="number" min="0" step="0.01" name="edd-payment-amount" id="edd-payment-amount" value="<?php echo edd_get_payment_amount( $payment_id ); ?>"/>
+						<p class="description"><?php _e( 'If needed, you can update the purchase total here.', 'edd' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row" valign="top">
 						<span><?php _e( 'Downloads Purchased', 'edd' ); ?></span>
 					</th>
 					<td id="purchased-downloads">
 						<?php
 							$downloads = maybe_unserialize( $payment_data['downloads'] );
 							$cart_items = isset( $payment_meta['cart_details'] ) ? maybe_unserialize( $payment_meta['cart_details'] ) : false;
-							if ( $downloads ) :
-								foreach ( $downloads as $download ) :
+							if ( $downloads ) {
+								foreach ( $downloads as $download ) {
 									$id = isset( $payment_data['cart_details'] ) ? $download['id'] : $download;
 
 									if ( isset( $download['options']['price_id'] ) ) {
@@ -62,8 +71,8 @@ $payment_data = edd_get_payment_meta( $payment_id  );
 											<input type="hidden" name="edd-purchased-downloads[' . $id . ']" value="' . $id . '"/>
 											<strong>' . get_the_title( $id ) . ' ' . $variable_prices . '</strong> - <a href="#" class="edd-remove-purchased-download" data-action="remove_purchased_download" data-id="' . $id . '">'. __( 'Remove', 'edd' ) .'</a>
 										  </div>';
-								endforeach;
-							endif;
+								}
+							}
 						?>
 						<p id="edit-downloads"><a href="#TB_inline?width=640&amp;inlineId=available-downloads" class="thickbox" title="<?php printf( __( 'Add %s to purchase', 'edd' ), strtolower( edd_get_label_plural() ) ); ?>"><?php printf( __( 'Add %s to purchase', 'edd' ), strtolower( edd_get_label_plural() ) ); ?></a></p>
 					</td>
@@ -75,21 +84,28 @@ $payment_data = edd_get_payment_meta( $payment_id  );
 					<td>
 						<?php
 							$notes = edd_get_payment_notes( $payment->ID );
-							if ( ! empty( $notes ) ) :
+							if ( ! empty( $notes ) ) {
 								echo '<ul id="payment-notes">';
-								foreach ( $notes as $note ):
+								foreach ( $notes as $note ) {
 									if ( ! empty( $note->user_id ) ) {
 										$user = get_userdata( $note->user_id );
 										$user = $user->display_name;
 									} else {
 										$user = __( 'EDD Bot', 'edd' );
 									}
-									echo '<p><strong>' . $user . '</strong>&nbsp;<em>' . $note->comment_date . '</em>&nbsp;&mdash;' . $note->comment_content . '</p>';
-								endforeach;
+									$delete_note_url = wp_nonce_url( add_query_arg( array(
+										'edd-action' => 'delete_payment_note',
+										'note_id'    => $note->comment_ID
+									) ), 'edd_delete_payment_note' );
+									echo '<li>';
+										echo '<strong>' . $user . '</strong>&nbsp;<em>' . $note->comment_date . '</em>&nbsp;&mdash;&nbsp;' . $note->comment_content;
+										echo '&nbsp;&ndash;&nbsp;<a href="' . $delete_note_url . '" class="edd-delete-payment-note" title="' . __( 'Delete this payment note', 'edd' ) . '">' . __( 'Delete', 'edd' ) . '</a>';
+										echo '</li>';
+								}
 								echo '</ul>';
-							else :
+							} else {
 								echo '<p>' . __( 'No payment notes', 'edd' ) . '</p>';
-							endif;
+							}
 						?>
 						<label for="edd-payment-note"><?php _e( 'Add New Note', 'edd' ); ?></label><br/>
 						<textarea name="edd-payment-note" id="edd-payment-note" cols="30" rows="5"></textarea>
@@ -111,20 +127,29 @@ $payment_data = edd_get_payment_meta( $payment_id  );
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row" valign="top">
+						<span><?php _e( 'Unlimited Downloads', 'edd' ); ?></span>
+					</th>
+					<td>
+						<input type="checkbox" name="edd-unlimited-downloads" id="edd_unlimited_downloads" value="1"<?php checked( true, get_post_meta( $payment_id, '_unlimited_file_downloads', true ) ); ?>/>
+						<label class="description" for="edd_unlimited_downloads"><?php _e( 'Check this box to enable unlimited file downloads for this purchase.', 'edd' ); ?></label>
+					</td>
+				</tr>
 				<tr id="edd_payment_notification" style="display:none;">
 					<th scope="row" valign="top">
 						<span><?php _e( 'Send Purchase Receipt', 'edd' ); ?></span>
 					</th>
 					<td>
 						<input type="checkbox" name="edd-payment-send-email" id="edd_send_email" value="yes"/>
-						<span class="description"><?php _e( 'Check this box to send the purchase receipt, including all download links.', 'edd' ); ?></span>
+						<label class="description" for="edd_send_email"><?php _e( 'Check this box to send the purchase receipt, including all download links.', 'edd' ); ?></label>
 					</td>
 				</tr>
 				<?php do_action( 'edd_edit_payment_bottom', $payment->ID ); ?>
 			</tbody>
 		</table>
 
-		<input type="hidden" name="edd-action" value="edit_payment"/>
+		<input type="hidden" name="edd_action" value="edit_payment"/>
 		<input type="hidden" name="edd-old-status" value="<?php echo $status; ?>"/>
 		<input type="hidden" name="payment-id" value="<?php echo $payment_id; ?>"/>
 		<?php wp_nonce_field( 'edd_payment_nonce', 'edd-payment-nonce' ); ?>
@@ -133,17 +158,7 @@ $payment_data = edd_get_payment_meta( $payment_id  );
 	<div id="available-downloads" style="display:none;">
 		<form id="edd-add-downloads-to-purchase">
 			<p>
-				<select name="downloads[0][id]" class="edd-downloads-list">
-				<?php
-				$downloads = get_posts( apply_filters( 'edd_add_downloads_to_purchase_query', array( 'post_type' => 'download', 'posts_per_page' => -1 ) ) );
-				echo '<option value="0">' . sprintf( __('Select a %s', 'edd'), esc_html( edd_get_label_singular() ) ) . '</option>';
-				foreach( $downloads as $download ) {
-					?>
-					<option value="<?php echo $download->ID; ?>"><?php echo get_the_title( $download->ID ) ?></option>
-					<?php
-				}
-				?>
-				</select>
+				<?php echo EDD()->html->product_dropdown( 'downloads[0][id]' ); ?>
 				&nbsp;<img src="<?php echo admin_url('/images/wpspin_light.gif'); ?>" class="hidden edd_add_download_to_purchase_waiting waiting" />
 			</p>
 			<p>
