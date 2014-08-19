@@ -634,7 +634,7 @@ register_post_type('tool', array(
 'rewrite' => array('slug' => 'tool', 'with_front' => true),
 'query_var' => true,
 'supports' => array('title','editor','trackbacks','custom-fields','revisions','author','page-attributes','post-formats'),
-'taxonomies' => array('category','post_tag','chapter_tag','chapter_category','tool_category'),
+'taxonomies' => array('category','post_tag','tool_category'),
 'labels' => array (
   'name' => 'Tools',
   'singular_name' => 'Tool',
