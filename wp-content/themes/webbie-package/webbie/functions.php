@@ -51,10 +51,10 @@ get_template_part('nhp', 'options');
 if ( function_exists( 'register_nav_menus' ) ) {
 	register_nav_menus(
 		array(
-		  'main_menu' => __( 'Main Menu', 'cake' ),
-		  'secondary_menu' =>  __( 'Secondary Menu', 'cake' ),
-		)
-	);
+			'main_menu' => __( 'Main Menu', 'cake' ),
+			'secondary_menu' =>  __( 'Secondary Menu', 'cake' ),
+			)
+		);
 }
 
 
@@ -134,10 +134,10 @@ if ( function_exists( 'add_theme_support' ) ) {
 	 * This functions adds our above defined image sizes to the Attachment Display Settings interface
 	 */
 	function cake_show_image_sizes($sizes) {
-	    $sizes['cake_regular'] = __( 'Custom Regular', 'cake' );
-	    $sizes['cake_medium'] = __( 'Custom Medium', 'cake' );
-	    $sizes['cake_large'] = __( 'Custom Large', 'cake' );
-	    return $sizes;
+		$sizes['cake_regular'] = __( 'Custom Regular', 'cake' );
+		$sizes['cake_medium'] = __( 'Custom Medium', 'cake' );
+		$sizes['cake_large'] = __( 'Custom Large', 'cake' );
+		return $sizes;
 	}
 	add_filter('image_size_names_choose', 'cake_show_image_sizes');
 
@@ -169,7 +169,7 @@ if ( function_exists( 'add_theme_support' ) ) {
  */
 add_action('after_setup_theme', 'cake_setup');
 function cake_setup(){
-    load_theme_textdomain('cake', get_template_directory() . '/languages');
+	load_theme_textdomain('cake', get_template_directory() . '/languages');
 
 	$locale = get_locale();
 	$locale_file = get_template_directory() . "/languages/$locale.php";
@@ -209,49 +209,49 @@ if(function_exists('register_sidebar')){
 		'after_widget' => '</div></aside>',
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
-	));
+		));
 	register_sidebar(array(
 		'name' => __( 'Sidebar Block #2', 'cake' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s clearfix"><div class="section_content clearfix">',
 		'after_widget' => '</div></aside>',
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
-	));
+		));
 	register_sidebar(array(
 		'name' => __( 'Sidebar Block #3', 'cake' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s clearfix"><div class="section_content clearfix">',
 		'after_widget' => '</div></aside>',
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
-	));
+		));
 	register_sidebar(array(
 		'name' => __( 'Sidebar Block #4', 'cake' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s clearfix"><div class="section_content clearfix">',
 		'after_widget' => '</div></aside>',
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
-	));
+		));
 	register_sidebar(array(
 		'name' => __( 'Sidebar Block #5', 'cake' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s clearfix"><div class="section_content clearfix">',
 		'after_widget' => '</div></aside>',
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
-	));
+		));
 	register_sidebar(array(
 		'name' => __( 'Sidebar Block #6', 'cake' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s clearfix"><div class="section_content clearfix">',
 		'after_widget' => '</div></aside>',
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
-	));
+		));
 	register_sidebar(array(
 		'name' => __( 'eBook Sidebar', 'cake' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s clearfix"><div class="section_content clearfix">',
 		'after_widget' => '</div></aside>',
 		'before_title' => '<h3><span class="nav_divider"><span class="darker"></span><span class="lighter"></span></span>',
 		'after_title' => '</h3>',
-	));
+		));
 }
 
 
@@ -266,7 +266,7 @@ if(function_exists('register_sidebar')){
  * =======================================================================================================================================
  */
 function new_excerpt_more($more) {
-       global $post;
+	global $post;
 	return '&hellip;<br /><br /><a href="'. get_permalink($post->ID) . '" class="read_more">' . __( 'read more &rarr;', 'cake' ) . '</a>';
 }
 add_filter('excerpt_more', 'new_excerpt_more');
@@ -291,26 +291,26 @@ function cake_index_nav( $nav_id ) {
 	global $wp_query;
 
 	if ( $wp_query->max_num_pages > 1 ) : ?>
-		<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
-			<ul>
-				<li class="nextPost"><?php previous_posts_link( __( '&larr; newer ', 'cake' ) ); ?></li>
-				<li class="prevPost"><?php next_posts_link( __( 'older &rarr;', 'cake' ) ); ?></li>
-			</ul>
-		</nav>
-	<?php endif;
+	<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
+		<ul>
+			<li class="nextPost"><?php previous_posts_link( __( '&larr; newer ', 'cake' ) ); ?></li>
+			<li class="prevPost"><?php next_posts_link( __( 'older &rarr;', 'cake' ) ); ?></li>
+		</ul>
+	</nav>
+<?php endif;
 }
 // (just prev and next)
 function cake_index_nav_symbol_nav( $nav_id ) {
 	global $wp_query;
 
 	if ( $wp_query->max_num_pages > 1 ) : ?>
-		<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
-			<span class="next_post"><?php previous_posts_link(  __( 'Newer', 'cake' ) ); ?></span>
-			<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
-			<span class="prev_post"><?php next_posts_link( __( 'Older', 'cake' ) ); ?></span>
-			<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
-		</nav>
-	<?php endif;
+	<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
+		<span class="next_post"><?php previous_posts_link(  __( 'Newer', 'cake' ) ); ?></span>
+		<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
+		<span class="prev_post"><?php next_posts_link( __( 'Older', 'cake' ) ); ?></span>
+		<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
+	</nav>
+<?php endif;
 }
 
 // –––––––––––––––––––––––––––––––––
@@ -320,26 +320,26 @@ function cake_single_nav( $nav_id ) {
 	global $wp_query;
 
 	if ( $wp_query->max_num_pages < 1 ) : ?>
-		<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
-			<ul>
-				<li class="next_post"><?php next_post_link( __( '&larr; %link ', 'cake' ) ); ?></li>
-				<li class="prev_post"><?php previous_post_link( __( '%link &rarr;', 'cake' ) ); ?></li>
-			</ul>
-		</nav>
-	<?php endif;
+	<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
+		<ul>
+			<li class="next_post"><?php next_post_link( __( '&larr; %link ', 'cake' ) ); ?></li>
+			<li class="prev_post"><?php previous_post_link( __( '%link &rarr;', 'cake' ) ); ?></li>
+		</ul>
+	</nav>
+<?php endif;
 }
 // (just prev and next)
 function cake_single_symbol_nav( $nav_id ) {
 	global $wp_query;
 
 	if ( $wp_query->max_num_pages < 1 ) : ?>
-		<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
-			<span class="next_post"><?php next_post_link( '%link', __( 'Next', 'cake') ); ?></span>
-			<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
-			<span class="prev_post"><?php previous_post_link( '%link', __( 'Prev', 'cake') ); ?></span>
-			<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
-		</nav>
-	<?php endif;
+	<nav id="<?php echo $nav_id; ?>" class="content_nav clearfix">
+		<span class="next_post"><?php next_post_link( '%link', __( 'Next', 'cake') ); ?></span>
+		<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
+		<span class="prev_post"><?php previous_post_link( '%link', __( 'Prev', 'cake') ); ?></span>
+		<div class="nav_divider"><div class="darker"></div><div class="lighter"></div></div>
+	</nav>
+<?php endif;
 }
 
 
@@ -471,16 +471,16 @@ function cake_scripts_and_styles() {
 
 	// conditional stylesheets
 	function conditional_stylesheets() {
-	    global $wp_styles;
+		global $wp_styles;
 
-	    wp_enqueue_style( 'ie-css', get_template_directory_uri() . '/css/cake-ie.css', array() , '' );
-	    $wp_styles->add_data( 'ie-css', 'conditional', 'IE 9' );
+		wp_enqueue_style( 'ie-css', get_template_directory_uri() . '/css/cake-ie.css', array() , '' );
+		$wp_styles->add_data( 'ie-css', 'conditional', 'IE 9' );
 
-	    wp_enqueue_style( 'font-awesome-ie7', get_template_directory_uri() . '/css/font-awesome/font-awesome-ie7.min.css', array() , '1.0' );
-	    $wp_styles->add_data( 'font-awesome-ie7', 'conditional', 'IE 7' );
+		wp_enqueue_style( 'font-awesome-ie7', get_template_directory_uri() . '/css/font-awesome/font-awesome-ie7.min.css', array() , '1.0' );
+		$wp_styles->add_data( 'font-awesome-ie7', 'conditional', 'IE 7' );
 
-	    wp_enqueue_style( 'font-awesome-more-ie7', get_template_directory_uri() . '/css/font-awesome/font-awesome-more-ie7.min', array() , '1.0' );
-	    $wp_styles->add_data( 'font-awesome-more-ie7', 'conditional', 'IE 7' );
+		wp_enqueue_style( 'font-awesome-more-ie7', get_template_directory_uri() . '/css/font-awesome/font-awesome-more-ie7.min', array() , '1.0' );
+		$wp_styles->add_data( 'font-awesome-more-ie7', 'conditional', 'IE 7' );
 	}
 	add_action( 'wp_print_styles', 'conditional_stylesheets' );
 
@@ -605,13 +605,53 @@ include("functions/cake-custom/cake_reviews.php");
 include("functions/cake-custom/cake_features.php");
 include("functions/cake-custom/cake_comments.php");
 
+// Custom Taxonomy for Tool Type
+add_action( 'init', 'create_tool_tax' );
 
+function create_tool_tax() {
+	register_taxonomy(
+		'tool_category',
+		'tool',
+		array(
+			'label' => __( 'Tool Category' ),
+			'rewrite' => array( 'slug' => 'tool_category' ),
+			'hierarchical' => true,
+			)
+		);
+}
 
-
-
-
-
-
+add_action('init', 'cptui_register_my_cpt_tool');
+function cptui_register_my_cpt_tool() {
+register_post_type('tool', array(
+'label' => 'Tools',
+'description' => '',
+'public' => true,
+'show_ui' => true,
+'show_in_menu' => true,
+'capability_type' => 'post',
+'map_meta_cap' => true,
+'hierarchical' => false,
+'rewrite' => array('slug' => 'tool', 'with_front' => true),
+'query_var' => true,
+'supports' => array('title','editor','trackbacks','custom-fields','revisions','author','page-attributes','post-formats'),
+'taxonomies' => array('category','post_tag','chapter_tag','chapter_category','tool_category'),
+'labels' => array (
+  'name' => 'Tools',
+  'singular_name' => 'Tool',
+  'menu_name' => 'Tools',
+  'add_new' => 'Add Tool',
+  'add_new_item' => 'Add New Tool',
+  'edit' => 'Edit',
+  'edit_item' => 'Edit Tool',
+  'new_item' => 'New Tool',
+  'view' => 'View Tool',
+  'view_item' => 'View Tool',
+  'search_items' => 'Search Tools',
+  'not_found' => 'No Tools Found',
+  'not_found_in_trash' => 'No Tools Found in Trash',
+  'parent' => 'Parent Tool',
+)
+) ); }
 
 
 /*
@@ -671,25 +711,25 @@ function cake_initialize_cmb_meta_boxes() {
  */
 function getPostViews($postID){
 	$count_key = 'post_views_count';
-    $count = get_post_meta($postID, $count_key, true);
-    if($count==''){
-        delete_post_meta($postID, $count_key);
-        add_post_meta($postID, $count_key, '0');
-        return "0 View";
-    }
-    return $count.' Views';
+	$count = get_post_meta($postID, $count_key, true);
+	if($count==''){
+		delete_post_meta($postID, $count_key);
+		add_post_meta($postID, $count_key, '0');
+		return "0 View";
+	}
+	return $count.' Views';
 }
 function setPostViews($postID) {
-    $count_key = 'post_views_count';
-    $count = get_post_meta($postID, $count_key, true);
-    if($count==''){
-        $count = 0;
-        delete_post_meta($postID, $count_key);
-        add_post_meta($postID, $count_key, '0');
-    }else{
-        $count++;
-        update_post_meta($postID, $count_key, $count);
-    }
+	$count_key = 'post_views_count';
+	$count = get_post_meta($postID, $count_key, true);
+	if($count==''){
+		$count = 0;
+		delete_post_meta($postID, $count_key);
+		add_post_meta($postID, $count_key, '0');
+	}else{
+		$count++;
+		update_post_meta($postID, $count_key, $count);
+	}
 }
 
 
@@ -706,7 +746,7 @@ function setPostViews($postID) {
  * function for display most recent comments
  */
 function cake_recent_comments($no_comments = 10, $comment_len = 50) {
-    global $wpdb;
+	global $wpdb;
 
 	$sql = "SELECT * FROM $wpdb->comments";
 	$sql .= " JOIN $wpdb->posts ON ID = comment_post_ID";
@@ -719,26 +759,26 @@ function cake_recent_comments($no_comments = 10, $comment_len = 50) {
 	if ($comments) {
 		echo '<nav class="toc_nav"> <ul class="secondary_nav recent_comments">';
 		foreach ($comments as $comment) { ?>
-			<li class="clearfix">
-				<a href="<?php echo get_permalink( $comment->comment_post_ID ) . '#comment-' . $comment->comment_ID; ?>" class="clearfix">
+		<li class="clearfix">
+			<a href="<?php echo get_permalink( $comment->comment_post_ID ) . '#comment-' . $comment->comment_ID; ?>" class="clearfix">
 
-					<span class="img_wrap">
-						<?php echo get_avatar( $comment, 50 ); ?>
-					</span>
+				<span class="img_wrap">
+					<?php echo get_avatar( $comment, 50 ); ?>
+				</span>
 
-					<span class="toc_el_title">
-						<?php echo strip_tags(substr(apply_filters('get_comment_text', $comment->comment_content), 0, $comment_len)) . "&hellip;"; ?>
-					</span>
+				<span class="toc_el_title">
+					<?php echo strip_tags(substr(apply_filters('get_comment_text', $comment->comment_content), 0, $comment_len)) . "&hellip;"; ?>
+				</span>
 
-					<small class="toc_meta clearfix">
-						<span class="divider"></span>
-						<i class="icon-user"></i> <strong><?php echo strip_tags($comment->comment_author); ?></strong>
-					</small>
+				<small class="toc_meta clearfix">
+					<span class="divider"></span>
+					<i class="icon-user"></i> <strong><?php echo strip_tags($comment->comment_author); ?></strong>
+				</small>
 
-				</a>
-			</li>
+			</a>
+		</li>
 
-			<?php }
+		<?php }
 		echo '</ul> </nav>';
 	}
 }
@@ -759,11 +799,11 @@ function cake_recent_comments($no_comments = 10, $comment_len = 50) {
  */
 function __set_chapters_for_author( &$query )
 {
-    if ( $query->is_author )
-        $query->set( 'post_type', 'chapters' );
+	if ( $query->is_author )
+		$query->set( 'post_type', 'chapters' );
     remove_action( 'pre_get_posts', '__set_chapters_for_author' ); // run once!
-}
-add_action( 'pre_get_posts', '__set_chapters_for_author' );
+  }
+  add_action( 'pre_get_posts', '__set_chapters_for_author' );
 
 
 
@@ -777,9 +817,9 @@ add_action( 'pre_get_posts', '__set_chapters_for_author' );
  * =======================================================================================================================================
  */
 function cake_post_author_archive($query) {
-    if ($query->is_author)
-        $query->set( 'post_type', array('post', 'chapters') );
-    remove_action( 'pre_get_posts', 'cake_post_author_archive' );
+	if ($query->is_author)
+		$query->set( 'post_type', array('post', 'chapters') );
+	remove_action( 'pre_get_posts', 'cake_post_author_archive' );
 }
 add_action('pre_get_posts', 'cake_post_author_archive');
 
@@ -840,78 +880,78 @@ function cake_contributors() {
 
 	foreach ($authors as $author ) { ?>
 
-		<div class="contributor clearfix">
-			<div class="section_content clearfix">
+	<div class="contributor clearfix">
+		<div class="section_content clearfix">
 
-				<span class="contributor_image">
-					<?php echo get_avatar($author->ID, 250); ?>
-				</span>
+			<span class="contributor_image">
+				<?php echo get_avatar($author->ID, 250); ?>
+			</span>
 
 
 
-				<div class="contributor_info clearfix">
-					<h2>
-						<?php echo esc_attr( $author->display_name ); ?>
-					</h2>
-					<p>
-						<?php if ( $author->user_url ) :  ?>
-							<a href="<?php echo esc_url( $author->user_url ); ?>" title="<?php _e('Website','cake'); ?>">
-								<?php echo esc_url( $author->user_url ); ?>
-							</a>
-						<?php endif; ?>
+			<div class="contributor_info clearfix">
+				<h2>
+					<?php echo esc_attr( $author->display_name ); ?>
+				</h2>
+				<p>
+					<?php if ( $author->user_url ) :  ?>
+						<a href="<?php echo esc_url( $author->user_url ); ?>" title="<?php _e('Website','cake'); ?>">
+							<?php echo esc_url( $author->user_url ); ?>
+						</a>
+					<?php endif; ?>
 
-					</p>
+				</p>
 
-					<div class="contributor_social">
-						<?php if ( $author->twitter ) :  ?>
-							<a href="<?php echo esc_url( $author->twitter ); ?>" title="<?php _e('Twitter','cake'); ?>">
-								<i class="icon-twitter"></i>
-							</a>
-						<?php endif; ?>
+				<div class="contributor_social">
+					<?php if ( $author->twitter ) :  ?>
+						<a href="<?php echo esc_url( $author->twitter ); ?>" title="<?php _e('Twitter','cake'); ?>">
+							<i class="icon-twitter"></i>
+						</a>
+					<?php endif; ?>
 
-						<?php if ( $author->facebook ) :  ?>
-							<a href="<?php echo esc_url( $author->facebook ); ?>" title="<?php _e('Facebook','cake'); ?>">
-								<i class="icon-facebook"></i>
-							</a>
-						<?php endif; ?>
+					<?php if ( $author->facebook ) :  ?>
+						<a href="<?php echo esc_url( $author->facebook ); ?>" title="<?php _e('Facebook','cake'); ?>">
+							<i class="icon-facebook"></i>
+						</a>
+					<?php endif; ?>
 
-						<?php if ( $author->instagram ) :  ?>
-							<a href="<?php echo esc_url( $author->instagram ); ?>" title="<?php _e('Instagram','cake'); ?>">
-								<i class="icon-instagram"></i>
-							</a>
-						<?php endif; ?>
+					<?php if ( $author->instagram ) :  ?>
+						<a href="<?php echo esc_url( $author->instagram ); ?>" title="<?php _e('Instagram','cake'); ?>">
+							<i class="icon-instagram"></i>
+						</a>
+					<?php endif; ?>
 
-						<?php if ( $author->pinterest ) :  ?>
-							<a href="<?php echo esc_url( $author->pinterest ); ?>" title="<?php _e('Pinterest','cake'); ?>">
-								<i class="icon-pinterest"></i>
-							</a>
-						<?php endif; ?>
+					<?php if ( $author->pinterest ) :  ?>
+						<a href="<?php echo esc_url( $author->pinterest ); ?>" title="<?php _e('Pinterest','cake'); ?>">
+							<i class="icon-pinterest"></i>
+						</a>
+					<?php endif; ?>
 
-						<?php if ( $author->linkedin ) :  ?>
-							<a href="<?php echo esc_url( $author->linkedin ); ?>" title="<?php _e('LinkedIn','cake'); ?>">
-								<i class="icon-linkedin"></i>
-							</a>
-						<?php endif; ?>
+					<?php if ( $author->linkedin ) :  ?>
+						<a href="<?php echo esc_url( $author->linkedin ); ?>" title="<?php _e('LinkedIn','cake'); ?>">
+							<i class="icon-linkedin"></i>
+						</a>
+					<?php endif; ?>
 
-						<?php if ( $author->flickr ) :  ?>
-							<a href="<?php echo esc_url( $author->flickr ); ?>" title="<?php _e('Flickr','cake'); ?>">
-								<i class="icon-flickr"></i>
-							</a>
-						<?php endif; ?>
-					</div>
-
-					<span class="divider"></span>
-					<br class="clearfloat" />
-
-					<div class="contributor_description clearfix">
-						<?php echo $author->user_description; ?>
-					</div>
-
+					<?php if ( $author->flickr ) :  ?>
+						<a href="<?php echo esc_url( $author->flickr ); ?>" title="<?php _e('Flickr','cake'); ?>">
+							<i class="icon-flickr"></i>
+						</a>
+					<?php endif; ?>
 				</div>
 
+				<span class="divider"></span>
+				<br class="clearfloat" />
+
+				<div class="contributor_description clearfix">
+					<?php echo $author->user_description; ?>
+				</div>
 
 			</div>
+
+
 		</div>
+	</div>
 
 	<?php }
 
