@@ -942,8 +942,8 @@ Main Content
 	z-index: 10;
 }
 .main_content {
-	margin: 0 0 0 25%;
-	width: 75%;
+	margin: auto;
+	/*width: 75%;*/
 	position: relative;
 	z-index: 10;
 }
@@ -1926,8 +1926,8 @@ article specific
 }
 article.hentry,
 .toc_content {
-	max-width: 650px;
-	margin: 5% auto;
+	max-width: 1100px;
+	margin: auto;
 	font-size: 130%;
 	line-height: 170%;
 }
